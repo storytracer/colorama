@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo Map</title>
+    <title>Colorama</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -35,10 +35,43 @@
             width: 100%;
         }
 
-        .image-cluster-icon, .leaflet-marker-icon {
-            border: 1px solid #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 6px rgba(0,0,0,0.6);
+        .cluster-marker {
+            position: relative;
+            width: 50px; /* Width of the cluster image */
+            height: 50px; /* Height of the cluster image */
+            border-radius: 10%;
+            border: 2px solid #fff;
+            box-shadow: 3px 3px 5px -2px #333;
+        }
+        
+        .cluster-marker img {
+            border-radius: 10%;
+        }
+
+        .cluster-marker::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; /* Adjust as needed */
+            left: 50%;
+            margin-left: 0px; /* Half the width of the triangle */
+            border-width: 10px 5px 0;
+            border-style: solid;
+            border-color: #fff transparent transparent; /* Match cluster background */
+            transform: translateX(-50%);
+        }
+
+        .cluster-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-right: -10px;
+            margin-top: -10px;
+            background-color: #1E90FF; /* Blue background */
+            color: #fff; /* White text */
+            border-radius: 10px; /* Rounded corners */
+            padding: 2px 5px;
+            font-size: 12px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -52,6 +85,8 @@
             maxZoom: 18,
             zoom: 3,
         });
+
+        const photoSize = 50;
 
         var gl = L.maplibreGL({
             style: 'https://api.maptiler.com/maps/basic-v2-light/style.json?key=Uw1F9DMKKQO925wMgQel'
@@ -72,11 +107,12 @@
                     onEachFeature: (feature, layer) => {
                         if (feature.properties && feature.properties.image_file) {
                             const imageFile = feature.properties.image_file;
-                            const imageUrl = "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/" + imageFile;
+                            const photoCount = feature.properties.count;
+                            const imageUrl = "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:100:100/plain/local:///kahn/" + imageFile;
                             const marker = L.marker(layer.getLatLng(), {
                                 icon: L.icon({
                                     iconUrl: imageUrl,
-                                    iconSize: [50, 50],
+                                    iconSize: [photoSize, photoSize],
                                 })
                             });
                             markers.addLayer(marker);
@@ -86,16 +122,25 @@
                 map.addLayer(markers);
             });
 
-        function createClusterCustomIcon(cluster) {
-            const children = cluster.getAllChildMarkers();
-            const firstChild = children[0];
+            function createClusterCustomIcon(cluster) {
+                const children = cluster.getAllChildMarkers();
+                const firstChildImage = children.length ? children[0].options.icon.options.iconUrl : '';
+                const count = cluster.getChildCount();
 
-            return L.divIcon({
-                html: `<img src="${firstChild.options.icon.options.iconUrl}" style="width: 50px; height: 50px; border-radius: 50%;">`,
-                className: 'image-cluster-icon',
-                iconSize: L.point(50, 50)
-            });
-        }
+                const html = `
+                    <div class="cluster-marker">
+                        <img src="${firstChildImage}" width="${photoSize}" height="${photoSize}" alt="" />
+                        <div class="cluster-count">${count}</div>
+                    </div>
+                `;
+
+                return L.divIcon({
+                    html: html,
+                    className: '', // Important: this removes default Leaflet icon styling
+                    iconSize: L.point(50, 60), // Includes the height of the triangle
+                    iconAnchor: [25, 60] // Center of the image + height of the triangle
+                });
+            }
     });
     </script>
 </body>
