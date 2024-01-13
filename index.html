@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Colorama</title>
+    <meta property="og:description" content="Add a vector source to a map." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js'></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<style>
+    .cluster-marker {
+        background-color: transparent;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 25px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    let markers = {}; // Object to hold markers
+    let markersOnScreen = {}; // Object to track markers on screen
+    let currentClusterIds = [];
+
+    const map = new maplibregl.Map({
+        container: 'map',
+        style:
+            'https://api.maptiler.com/maps/basic-v2-light/style.json?key=Uw1F9DMKKQO925wMgQel',
+        zoom: 2,
+        center: [5, 49]
+    });
+
+    function getRandomInRange(from, to, fixed) {
+        return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+    }
+
+    // Function to fly to a random location
+    function flyToRandomLocation() {
+        // Generate random coordinates
+        var randomLat = getRandomInRange(-90, 90, 3);
+        var randomLng = getRandomInRange(-180, 180, 3);
+
+        // Use the flyTo method of maplibre-gl
+        map.flyTo({
+            center: [randomLng, randomLat],
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+    }
+
+    // Function to fly to a random feature from the 'clusters' layer
+    function flyToRandomFeature() {
+        // Query features from the 'clusters' layer
+        const features = map.querySourceFeatures('geohashes', {
+        });
+
+        // Check if there are any features
+        if (features.length === 0) {
+            console.log("No features found in the 'clusters' layer.");
+            return;
+        }
+
+        // Select a random feature
+        var randomFeature = features[Math.floor(Math.random() * features.length)];
+
+        // Check if the feature has geometry and coordinates
+        if (!randomFeature.geometry || !randomFeature.geometry.coordinates) {
+            console.log("The selected feature does not have valid coordinates.");
+            return;
+        }
+
+        // Use the flyTo method of maplibre-gl to fly to the feature's coordinates
+        map.flyTo({
+            center: randomFeature.geometry.coordinates,
+            zoom: 4,
+            curve: 0.7,
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+    }
+
+    map.addControl(new maplibregl.NavigationControl());
+
+    map.on('load', () => {
+        map.addSource('geohashes', {
+            type: 'geojson',
+            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+            // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+            data: 'https://features.colorama.app/collections/public.geohashes/items.json',
+            cluster: true,
+            clusterMaxZoom: 10, // Max zoom to cluster points on
+            clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+        });
+        
+        map.addLayer({
+            id: 'clusters',
+            type: 'circle',
+            source: 'geohashes',
+            filter: ['has', 'point_count'], // This filter ensures the layer is only used for clusters, not individual points
+            paint: {
+                'circle-color': 'transparent',
+                'circle-radius': 40,
+            }
+        });
+
+        map.addLayer({
+            id: 'unclustered-point',
+            type: 'circle',
+            source: 'geohashes',
+            minZoom: 14,
+            filter: ['!', ['has', 'point_count']],
+            paint: {
+                'circle-color': '#FF0000',
+                'circle-radius': 4,
+                'circle-stroke-width': 1,
+                'circle-stroke-color': '#fff'
+            }
+        });
+
+        map.on('click', 'clusters', (e) => {
+            const features = map.queryRenderedFeatures(e.point, {
+                layers: ['clusters']
+            });
+            const clusterId = features[0].properties.cluster_id;
+            map.getSource('geohashes').getClusterExpansionZoom(
+                clusterId,
+                (err, zoom) => {
+                    if (err) return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom
+                    });
+                }
+            );
+        });
+
+        setTimeout(flyToRandomFeature, 500); // Initial flight
+
+        map.on('data', (e) => {
+            if (e.sourceId !== 'geohashes' || !e.isSourceLoaded) return;
+
+            // map.on('move', updateMarkers);
+            map.on('moveend', updateMarkers);
+            updateMarkers();
+        });
+    });
+
+    function createImageElement(imageUrl) {
+        const el = document.createElement('div');
+        el.className = 'cluster-marker';
+        el.style.backgroundImage = `url(${imageUrl})`;
+        el.style.width = '75px';  // Customize as needed
+        el.style.height = '75px'; // Customize as needed
+        el.style.backgroundSize = 'cover';
+        return el;
+    }
+
+    function updateMarkers() {
+        // Get the current zoom level
+        const zoomLevel = map.getZoom();
+
+        // Define a new structure to hold markers that should currently be on screen
+        const newMarkers = {};
+
+        // Get features for the current zoom level
+        const features = map.querySourceFeatures('geohashes', {
+            layers: ['clusters'],
+        });
+
+        // Update current cluster IDs
+        currentClusterIds = features.map(feature => feature.properties.cluster_id).filter(id => id !== undefined);
+        
+        // Iterate over each cluster feature
+        features.forEach(feature => {
+            const coords = feature.geometry.coordinates;
+            const id = feature.properties.cluster_id;
+
+            // Add or update markers for current clusters
+            getClusterFirstImage(id, imageUrl => {
+                const el = createImageElement(imageUrl);
+                if (!markers[id]) {
+                    markers[id] = new maplibregl.Marker({ element: el }).setLngLat(coords).addTo(map);
+                } else {
+                    markers[id].setLngLat(coords);
+                    markers[id].getElement().style.backgroundImage = `url(${imageUrl})`;
+                }
+                newMarkers[id] = markers[id];
+            });
+        });
+
+        console.log('Current cluster IDs:', currentClusterIds, 'Markers on screen:', Object.keys(markersOnScreen));
+
+        // Remove markers not belonging to current clusters or those that are not visible at this zoom level
+        Object.keys(markersOnScreen).forEach(id => {
+            if (!newMarkers[id] || !currentClusterIds.includes(id)) {
+                markersOnScreen[id].remove();
+                delete markers[id];
+            }
+        });
+
+        markersOnScreen = newMarkers;
+    }
+
+    function getClusterFirstImage(clusterId, callback) {
+        if (!clusterId) {
+            return;
+        }
+
+        // Check if the clusterId is currently valid
+        if (!currentClusterIds.includes(clusterId)) {
+            console.log('Cluster ID not found or no longer exists:', clusterId);
+            return;
+        }
+
+        const source = map.getSource('geohashes');
+        source.getClusterLeaves(clusterId, 1, 0, (error, leaves) => {
+            if (error) {
+                console.error("Error getting cluster leaves for cluster id:" + clusterId, error);
+                return;
+            }
+            if (leaves.length > 0) {
+                const imageFile = leaves[0].properties.image_file;
+                const imageUrl = "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/" + imageFile; // Adjusted for brevity
+                callback(imageUrl);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
