@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var attribution = L.control
     .attribution({
-      position: "bottomright",
+      position: "topleft",
     })
     .addTo(map);
   attribution.addAttribution(
@@ -117,7 +117,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function drawerTouched() {
-    var drawer = document.getElementById("drawer");
-    drawer.classList.toggle("expanded"); // Toggle the .expanded class
+    var drawerElement = document.getElementById("drawer");
+    var mapElement = document.getElementById("map");
+    var center = map.getCenter();
+    console.log(center);
+    drawerElement.classList.toggle("expanded"); // Toggle the .expanded class
+    // mapElement.classList.toggle("collapsed"); // Toggle the .expanded class
+
+    if (drawerElement.classList.contains("expanded")) {
+      map.panBy([0, 200], { easeLinearity: 1 })
+    } else {
+      map.panBy([0, -200])
+    }
   }
 });
