@@ -85,12 +85,13 @@
         const imageUrlPrefix = 'https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/';
 
         var gl = L.maplibreGL({
-            style: 'https://api.maptiler.com/maps/basic-v2-light/style.json?key=Uw1F9DMKKQO925wMgQel'
+            style: 'https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel'
         }).addTo(map);
 
         const markers = L.markerClusterGroup({
             iconCreateFunction: createClusterCustomIcon,
             showCoverageOnHover: false,
+            maxClusterRadius: 70,
         });
 
         // Replace this with the path to your GeoJSON file
@@ -128,8 +129,7 @@
                     icon: L.divIcon({
                         html: html,
                         className: '', // Important: this removes default Leaflet icon styling
-                        iconSize: L.point(50, 70), // Includes the height of the triangle
-                        iconAnchor: [25, 70] // Center of the image + height of the triangle
+                        iconSize: L.point(60, 60), // Includes the height of the triangle
                     })
                 });
 
@@ -155,8 +155,7 @@
                 return L.divIcon({
                     html: html,
                     className: '', // Important: this removes default Leaflet icon styling
-                    iconSize: L.point(50, 70), // Includes the height of the triangle
-                    iconAnchor: [25, 70] // Center of the image + height of the triangle
+                    iconSize: L.point(60, 60), // Includes the height of the triangle
                 });
             }
     });
