@@ -37,30 +37,21 @@
 
         .cluster-marker {
             position: relative;
-            width: 50px; /* Width of the cluster image */
-            height: 50px; /* Height of the cluster image */
-            border-radius: 10%;
-            border: 2px solid #fff;
-            box-shadow: 3px 3px 5px -2px #333;
+            width: 60px; /* Width of the cluster image */
+            height: 60px; /* Height of the cluster image */
         }
         
         .cluster-marker img {
-            border-radius: 10%;
+            border-radius: inherit;
         }
 
-        .cluster-marker::after {
-            content: '';
-            position: absolute;
-            bottom: -10px; /* Adjust as needed */
-            left: 50%;
-            margin-left: 0px; /* Half the width of the triangle */
-            border-width: 10px 5px 0;
-            border-style: solid;
-            border-color: #fff transparent transparent; /* Match cluster background */
-            transform: translateX(-50%);
+        .cluster-marker, .photo-marker {
+            border-radius: 10px;
+            border: 3px solid #fff;
+            /* box-shadow: 3px 3px 5px -2px #333; */
         }
 
-        .cluster-count {
+        .marker-count-badge {
             position: absolute;
             top: 0;
             right: 0;
@@ -86,7 +77,8 @@
             zoom: 3,
         });
 
-        const photoSize = 50;
+        const photoSize = 60;
+        const imageUrlPrefix = 'https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/';
 
         var gl = L.maplibreGL({
             style: 'https://api.maptiler.com/maps/basic-v2-light/style.json?key=Uw1F9DMKKQO925wMgQel'
@@ -106,21 +98,29 @@
                 L.geoJSON(data, {
                     onEachFeature: (feature, layer) => {
                         if (feature.properties && feature.properties.image_file) {
-                            const imageFile = feature.properties.image_file;
-                            const photoCount = feature.properties.count;
-                            const imageUrl = "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:100:100/plain/local:///kahn/" + imageFile;
-                            const marker = L.marker(layer.getLatLng(), {
-                                icon: L.icon({
-                                    iconUrl: imageUrl,
-                                    iconSize: [photoSize, photoSize],
-                                })
-                            });
+                            let marker = createMarker(feature, layer.getLatLng());
                             markers.addLayer(marker);
                         }
                     }
                 });
                 map.addLayer(markers);
             });
+
+            function createMarker(feature, latlng) {
+                const imageFile = feature.properties.image_file;
+                console.log(feature.properties);
+                const photoCount = feature.properties.count;
+                const imageUrl = imageUrlPrefix + imageFile;
+
+                const marker = L.marker(latlng, {
+                    icon: L.icon({
+                        iconUrl: imageUrl,
+                        iconSize: [photoSize, photoSize],
+                        className: 'photo-marker',
+                    })
+                });
+                return marker;
+            }
 
             function createClusterCustomIcon(cluster) {
                 const children = cluster.getAllChildMarkers();
@@ -130,15 +130,15 @@
                 const html = `
                     <div class="cluster-marker">
                         <img src="${firstChildImage}" width="${photoSize}" height="${photoSize}" alt="" />
-                        <div class="cluster-count">${count}</div>
+                        <div class="marker-count-badge">${count}</div>
                     </div>
                 `;
 
                 return L.divIcon({
                     html: html,
                     className: '', // Important: this removes default Leaflet icon styling
-                    iconSize: L.point(50, 60), // Includes the height of the triangle
-                    iconAnchor: [25, 60] // Center of the image + height of the triangle
+                    iconSize: L.point(50, 70), // Includes the height of the triangle
+                    iconAnchor: [25, 70] // Center of the image + height of the triangle
                 });
             }
     });
