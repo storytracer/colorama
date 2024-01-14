@@ -18,7 +18,7 @@ $(function () {
 
   var attribution = L.control
     .attribution({
-      position: "topleft",
+      position: "bottomright",
     })
     .addTo(map);
   attribution.addAttribution(
@@ -88,6 +88,8 @@ $(function () {
   }
 
   function showPhotosForFeature(feature) {
+    console.log(feature);
+    map.panTo([feature.properties.latitude, feature.properties.longitude]);
     openDrawer();
     var geohash = feature.properties.geohash;
     var geojsonUrl =
@@ -109,7 +111,6 @@ $(function () {
               <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
               </div>`;
               grid.append(imageHTML);
-              console.log(imageUrl);
             }
           },
         });
