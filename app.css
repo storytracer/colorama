@@ -31,7 +31,7 @@ body, html {
 }
 
 .cluster-marker {
-    border-radius: 10%;
+    border-radius: 50%;
     background-size: 60px 60px;
 }
 
