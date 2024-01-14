@@ -35,20 +35,24 @@
             width: 100%;
         }
 
-        .cluster-marker {
+        .cluster-marker, .photo-marker {
             position: relative;
             width: 60px; /* Width of the cluster image */
             height: 60px; /* Height of the cluster image */
+            border-radius: 50%;
         }
         
-        .cluster-marker img {
+        .cluster-marker img, .photo-marker img {
             border-radius: inherit;
         }
 
         .cluster-marker, .photo-marker {
-            border-radius: 10px;
             border: 3px solid #fff;
             /* box-shadow: 3px 3px 5px -2px #333; */
+        }
+
+        .cluster-marker, .photo-marker {
+            border-radius: 10px;
         }
 
         .marker-count-badge {
@@ -99,6 +103,8 @@
                     onEachFeature: (feature, layer) => {
                         if (feature.properties && feature.properties.image_file) {
                             let marker = createMarker(feature, layer.getLatLng());
+                            marker.options.photo_count = feature.properties.count;
+                            marker.options.image_file = feature.properties.image_file;
                             markers.addLayer(marker);
                         }
                     }
@@ -108,29 +114,41 @@
 
             function createMarker(feature, latlng) {
                 const imageFile = feature.properties.image_file;
-                console.log(feature.properties);
                 const photoCount = feature.properties.count;
                 const imageUrl = imageUrlPrefix + imageFile;
 
+                const html = `
+                    <div class="photo-marker">
+                        <img src="${imageUrl}" width="${photoSize}" height="${photoSize}" alt="" />
+                        <div class="marker-count-badge">${photoCount}</div>
+                    </div>
+                `;
+
                 const marker = L.marker(latlng, {
-                    icon: L.icon({
-                        iconUrl: imageUrl,
-                        iconSize: [photoSize, photoSize],
-                        className: 'photo-marker',
+                    icon: L.divIcon({
+                        html: html,
+                        className: '', // Important: this removes default Leaflet icon styling
+                        iconSize: L.point(50, 70), // Includes the height of the triangle
+                        iconAnchor: [25, 70] // Center of the image + height of the triangle
                     })
                 });
+
                 return marker;
             }
 
             function createClusterCustomIcon(cluster) {
                 const children = cluster.getAllChildMarkers();
-                const firstChildImage = children.length ? children[0].options.icon.options.iconUrl : '';
-                const count = cluster.getChildCount();
+                const firstChild = children.length ? children[0] : null;
+                const firstChildImageFile = firstChild.options.image_file;
+                const imageUrl = imageUrlPrefix + firstChildImageFile;
+                const photoCount = children.reduce((total, child) => {
+                    return total + child.options.photo_count;
+                }, 0);
 
                 const html = `
                     <div class="cluster-marker">
-                        <img src="${firstChildImage}" width="${photoSize}" height="${photoSize}" alt="" />
-                        <div class="marker-count-badge">${count}</div>
+                        <img src="${imageUrl}" width="${photoSize}" height="${photoSize}" alt="" />
+                        <div class="marker-count-badge">${photoCount}</div>
                     </div>
                 `;
 
