@@ -11,14 +11,18 @@ document.addEventListener("DOMContentLoaded", function () {
     attributionControl: false,
   });
 
-  var attribution = L.control.attribution().addTo(map);
+  var attribution = L.control
+    .attribution({
+      position: "bottomright",
+    })
+    .addTo(map);
   attribution.addAttribution(
     '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
   );
 
   L.control
     .zoom({
-      position: "bottomright",
+      position: "topright",
     })
     .addTo(map);
 
@@ -111,5 +115,20 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("drawer").addEventListener("click", function () {
     var drawer = document.getElementById("drawer");
     drawer.classList.toggle("expanded"); // Toggle the .expanded class
+  });
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    var drawer = document.getElementById("drawer");
+    var mc = new Hammer(drawer);
+
+    mc.get("swipe").set({ direction: Hammer.DIRECTION_VERTICAL });
+
+    mc.on("swipeup swipedown", function (ev) {
+      if (ev.type === "swipeup") {
+        drawer.classList.add("expanded");
+      } else if (ev.type === "swipedown") {
+        drawer.classList.remove("expanded");
+      }
+    });
   });
 });
