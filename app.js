@@ -11,9 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
     attributionControl: false,
   });
 
+  var gl = L.maplibreGL({
+    style:
+      "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
+  }).addTo(map);
+
   var attribution = L.control
     .attribution({
-      position: "topright",
+      position: "bottomright",
     })
     .addTo(map);
   attribution.addAttribution(
@@ -22,18 +27,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   L.control
     .zoom({
-      position: "bottomright",
+      position: "topright",
     })
     .addTo(map);
 
   const photoSize = 60;
   const imageUrlPrefix =
     "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/";
-
-  var gl = L.maplibreGL({
-    style:
-      "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
-  }).addTo(map);
 
   const markers = L.markerClusterGroup({
     iconCreateFunction: createClusterCustomIcon,
