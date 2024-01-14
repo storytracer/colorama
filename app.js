@@ -112,23 +112,12 @@ document.addEventListener("DOMContentLoaded", function () {
     map.flyTo(center, 3);
   }, 750);
 
-  document.getElementById("drawer").addEventListener("click", function () {
+  "mousedown touchstart".split(" ").forEach(function(e){
+    document.getElementById("drawer").addEventListener(e, drawerTouched);
+  });
+
+  function drawerTouched() {
     var drawer = document.getElementById("drawer");
     drawer.classList.toggle("expanded"); // Toggle the .expanded class
-  });
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    var drawer = document.getElementById("drawer");
-    var mc = new Hammer(drawer);
-
-    mc.get("swipe").set({ direction: Hammer.DIRECTION_VERTICAL });
-
-    mc.on("swipeup swipedown", function (ev) {
-      if (ev.type === "swipeup") {
-        drawer.classList.add("expanded");
-      } else if (ev.type === "swipedown") {
-        drawer.classList.remove("expanded");
-      }
-    });
-  });
+  }
 });

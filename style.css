@@ -146,5 +146,5 @@ body, html {
 }
 
 #drawer.expanded {
-    height: 90vh; /* 90% of the viewport height */
+    height: 80vh; /* 90% of the viewport height */
 }
