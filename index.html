@@ -1,47 +1,185 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Colorama</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
 
     <link rel="stylesheet" href="app.css" />
     <script src="app.js"></script>
-    
+
     <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    />
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
 
     <!-- Maplibre GL -->
-    <link href="https://unpkg.com/maplibre-gl@2.2.1/dist/maplibre-gl.css" rel='stylesheet' />
+    <link
+      href="https://unpkg.com/maplibre-gl@2.2.1/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/maplibre-gl@2.2.1/dist/maplibre-gl.js"></script>
 
     <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js"></script>
-    <script src="/SmoothWheelZoom.js"></script> 
+    <script src="/SmoothWheelZoom.js"></script>
 
     <!-- MarkerCluster -->
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
+    />
 
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="map"></div>
     <div class="loading-overlay">
-        <div class="color-wheel"></div>
+      <div class="color-wheel"></div>
     </div>
 
     <div id="drawer">
-        <div id="handle"></div>
+      <div id="handle"></div>
     </div>
-</body>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const center = [49, 5];
+
+        const map = L.map("map", {
+          center: center,
+          maxZoom: 16,
+          zoom: 1,
+          zoomControl: false,
+          scrollWheelZoom: false,
+          smoothWheelZoom: true,
+          attributionControl: false,
+        });
+
+        var attribution = L.control
+          .attribution({
+            position: "topright",
+          })
+          .addTo(map);
+        attribution.addAttribution(
+          '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+        );
+
+        L.control
+          .zoom({
+            position: "bottomright",
+          })
+          .addTo(map);
+
+        const photoSize = 60;
+        const imageUrlPrefix =
+          "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/";
+
+        var gl = L.maplibreGL({
+          style:
+            "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
+        }).addTo(map);
+
+        const markers = L.markerClusterGroup({
+          iconCreateFunction: createClusterCustomIcon,
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: true,
+          spiderfyOnMaxZoom: false,
+        });
+
+        // Replace this with the path to your GeoJSON file
+        const geojsonUrl =
+          "https://features.colorama.app/collections/public.geohashes/items.json";
+
+        fetch(geojsonUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            L.geoJSON(data, {
+              onEachFeature: (feature, layer) => {
+                if (feature.properties && feature.properties.image_file) {
+                  let marker = createMarker(feature, layer.getLatLng());
+                  marker.options.photo_count = feature.properties.count;
+                  marker.options.image_file = feature.properties.image_file;
+                  markers.addLayer(marker);
+                }
+              },
+            });
+            map.addLayer(markers);
+          });
+
+        function createMarker(feature, latlng) {
+          const imageFile = feature.properties.image_file;
+          const photoCount = feature.properties.count;
+          const imageUrl = imageUrlPrefix + imageFile;
+
+          const html = `
+                <div class="photo-marker">
+                    <img src="${imageUrl}" width="${photoSize}" height="${photoSize}" alt="" />
+                    <div class="marker-count-badge">${photoCount}</div>
+                </div>
+            `;
+
+          const marker = L.marker(latlng, {
+            icon: L.divIcon({
+              html: html,
+              className: "", // Important: this removes default Leaflet icon styling
+              iconSize: L.point(60, 60), // Includes the height of the triangle
+            }),
+          });
+
+          return marker;
+        }
+
+        function createClusterCustomIcon(cluster) {
+          const children = cluster.getAllChildMarkers();
+          const firstChild = children.length ? children[0] : null;
+          const firstChildImageFile = firstChild.options.image_file;
+          const imageUrl = imageUrlPrefix + firstChildImageFile;
+          const photoCount = children.reduce((total, child) => {
+            return total + child.options.photo_count;
+          }, 0);
+
+          const html = `
+                <div class="cluster-marker">
+                    <img src="${imageUrl}" width="${photoSize}" height="${photoSize}" alt="" />
+                    <div class="marker-count-badge">${photoCount}</div>
+                </div>
+            `;
+
+          return L.divIcon({
+            html: html,
+            className: "", // Important: this removes default Leaflet icon styling
+            iconSize: L.point(60, 60), // Includes the height of the triangle
+          });
+        }
+
+        setTimeout(function () {
+          map.flyTo(center, 3);
+        }, 750);
+
+        "mousedown".split(" ").forEach(function (e) {
+          document.getElementById("drawer").addEventListener(e, drawerTouched);
+        });
+
+        function drawerTouched() {
+          var drawer = document.getElementById("drawer");
+          drawer.classList.toggle("expanded"); // Toggle the .expanded class
+        }
+      });
+    </script>
+  </body>
 </html>

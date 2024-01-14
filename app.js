@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var attribution = L.control
     .attribution({
-      position: "bottomright",
+      position: "topright",
     })
     .addTo(map);
   attribution.addAttribution(
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   L.control
     .zoom({
-      position: "topright",
+      position: "bottomright",
     })
     .addTo(map);
 
