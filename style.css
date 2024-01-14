@@ -1,0 +1,118 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.cluster-marker, .photo-marker {
+    position: relative;
+    width: 60px; /* Width of the cluster image */
+    height: 60px; /* Height of the cluster image */
+}
+
+.cluster-marker img, .photo-marker img {
+    border-radius: inherit;
+}
+
+.cluster-marker, .photo-marker {
+    border: 3px solid #fff;
+    /* box-shadow: 3px 3px 5px -2px #333; */
+}
+
+.photo-marker {
+    border-radius: 10%;
+}
+
+.cluster-marker {
+    border-radius: 10%;
+    background-size: 60px 60px;
+}
+
+.photo-marker .marker-count-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -10px;
+    margin-top: -10px;
+    background-color: #1E90FF; /* Blue background */
+    color: #fff; /* White text */
+    border-radius: 5px; /* Rounded corners */
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.cluster-marker .marker-count-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 60px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #FFF;
+    width: 60px;
+    text-align: center;
+    background-color: transparent;
+    border-radius: 10%;
+    text-shadow: 1px 1px 2px #333;
+}
+/* Overlay covering the entire screen */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #dbdbdc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* High z-index to ensure it's on top */
+    animation: fadeOutOverlay 2s ease forwards;
+}
+
+/* Spinning color wheel */
+.color-wheel {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 10px solid transparent;
+    border-top-color: #FF5733; /* Red */
+    border-right-color: #3498DB; /* Green */
+    border-bottom-color: #2ECC71; /* Blue */
+    border-left-color: #F1C40F; /* Yellow */
+    animation: spin 1s linear 0s infinite;
+}
+
+/* Keyframes for spinning the color wheel */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Keyframes for fading out the overlay */
+@keyframes fadeOutOverlay {
+    0% {
+        opacity: 1;
+    }
+    33.33% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+  
