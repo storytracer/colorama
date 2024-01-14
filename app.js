@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+$(function () {
   const center = [49, 5];
 
   const map = L.map("map", {
@@ -80,9 +80,40 @@ document.addEventListener("DOMContentLoaded", function () {
         className: "", // Important: this removes default Leaflet icon styling
         iconSize: L.point(60, 60), // Includes the height of the triangle
       }),
+    }).on("click", function () {
+      showPhotosForFeature(feature);
     });
 
     return marker;
+  }
+
+  function showPhotosForFeature(feature) {
+    openDrawer();
+    var geohash = feature.properties.geohash;
+    var geojsonUrl =
+      "https://features.colorama.app/collections/public.photos/items.json?geohash=" +
+      geohash;
+    const grid = $("#photo-grid");
+    grid.html("");
+    fetch(geojsonUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        L.geoJSON(data, {
+          onEachFeature: (feature, layer) => {
+            if (feature.properties && feature.properties["image.filename"]) {
+              const filename = feature.properties["image.filename"];
+              const imageUrl =
+                "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:512:512/plain/local:///kahn/" +
+                filename;
+              const imageHTML = `<div class="pure-u-1-4 pure-u-lg-1-8 l-box">
+              <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
+              </div>`;
+              grid.append(imageHTML);
+              console.log(imageUrl);
+            }
+          },
+        });
+      });
   }
 
   function createClusterCustomIcon(cluster) {
@@ -112,22 +143,28 @@ document.addEventListener("DOMContentLoaded", function () {
     map.flyTo(center, 3);
   }, 750);
 
-  "mousedown".split(" ").forEach(function(e){
-    document.getElementById("drawer").addEventListener(e, drawerTouched);
-  });
-
-  function drawerTouched() {
-    var drawerElement = document.getElementById("drawer");
-    var mapElement = document.getElementById("map");
-    var center = map.getCenter();
-    console.log(center);
-    drawerElement.classList.toggle("expanded"); // Toggle the .expanded class
-    // mapElement.classList.toggle("collapsed"); // Toggle the .expanded class
-
-    if (drawerElement.classList.contains("expanded")) {
-      map.panBy([0, 200], { easeLinearity: 1 })
-    } else {
-      map.panBy([0, -200])
+  function openDrawer() {
+    if (!$("#drawer").hasClass("expanded")) {
+      toggleDrawer();
     }
+  }
+
+  function panMapForDrawer() {
+    var drawerElement = $("#drawer");
+    var mapElement = $("#map");
+    if (drawerElement.hasClass("expanded")) {
+      map.panBy([0, 200], { easeLinearity: 1 });
+    } else {
+      map.panBy([0, -200]);
+    }
+  }
+
+  function toggleDrawer() {
+    var drawerElement = $("#drawer");
+    var mapElement = $("#map");
+
+    drawerElement.toggleClass("expanded"); // Toggle the .expanded class
+    mapElement.toggleClass("collapsed"); // Toggle the .expanded class
+    panMapForDrawer();
   }
 });

@@ -1,168 +1,180 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #dbdbdc;
 }
 
 #map {
-    height: 100%;
-    width: 100%;
-    transition: height 0.25s linear;
-}
-
-#map.collapsed {
-    height: 50%;
+  height: 100%;
+  width: 100%;
+  transition: height 0.25s linear;
 }
 
 .leaflet-container .leaflet-control-attribution a {
-    color: #333;
+  color: #333;
 }
 
 .leaflet-container .leaflet-control-attribution {
-    background: transparent !important;
-    margin-top: 5px !important;
-    margin-left: 5px !important;
+  background: transparent !important;
+  margin-top: 5px !important;
+  margin-left: 5px !important;
 }
 
-.cluster-marker, .photo-marker {
-    position: relative;
-    width: 60px; /* Width of the cluster image */
-    height: 60px; /* Height of the cluster image */
+.cluster-marker,
+.photo-marker {
+  position: relative;
+  width: 60px; /* Width of the cluster image */
+  height: 60px; /* Height of the cluster image */
 }
 
-.cluster-marker img, .photo-marker img {
-    border-radius: inherit;
+.cluster-marker img,
+.photo-marker img {
+  border-radius: inherit;
 }
 
-.cluster-marker, .photo-marker {
-    border: 3px solid #fff;
-    /* box-shadow: 3px 3px 5px -2px #333; */
+.cluster-marker,
+.photo-marker {
+  border: 3px solid #fff;
+  /* box-shadow: 3px 3px 5px -2px #333; */
 }
 
 .photo-marker {
-    border-radius: 10%;
+  border-radius: 10%;
 }
 
 .cluster-marker {
-    border-radius: 50%;
-    background-size: 60px 60px;
+  border-radius: 50%;
+  background-size: 60px 60px;
 }
 
 .photo-marker .marker-count-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-right: -10px;
-    margin-top: -10px;
-    background-color: #1E90FF; /* Blue background */
-    color: #fff; /* White text */
-    border-radius: 5px; /* Rounded corners */
-    padding: 2px 5px;
-    font-size: 12px;
-    font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: -10px;
+  margin-top: -10px;
+  background-color: #1e90ff; /* Blue background */
+  color: #fff; /* White text */
+  border-radius: 5px; /* Rounded corners */
+  padding: 2px 5px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .cluster-marker .marker-count-badge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    line-height: 60px;
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #FFF;
-    width: 60px;
-    text-align: center;
-    background-color: transparent;
-    border-radius: 10%;
-    text-shadow: 1px 1px 2px #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 60px;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #fff;
+  width: 60px;
+  text-align: center;
+  background-color: transparent;
+  border-radius: 10%;
+  text-shadow: 1px 1px 2px #333;
 }
 
 /* Loading Overlay */
 
 /* Overlay covering the entire screen */
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #dbdbdc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999; /* High z-index to ensure it's on top */
-    animation: fadeOutOverlay 2s ease forwards;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #dbdbdc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; /* High z-index to ensure it's on top */
+  animation: fadeOutOverlay 2s ease forwards;
 }
 
 /* Spinning color wheel */
 .color-wheel {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 10px solid transparent;
-    border-top-color: #FF5733; /* Red */
-    border-right-color: #3498DB; /* Green */
-    border-bottom-color: #2ECC71; /* Blue */
-    border-left-color: #F1C40F; /* Yellow */
-    animation: spin 1s linear 0s infinite;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 10px solid transparent;
+  border-top-color: #ff5733; /* Red */
+  border-right-color: #3498db; /* Green */
+  border-bottom-color: #2ecc71; /* Blue */
+  border-left-color: #f1c40f; /* Yellow */
+  animation: spin 1s linear 0s infinite;
 }
 
 /* Keyframes for spinning the color wheel */
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Keyframes for fading out the overlay */
 @keyframes fadeOutOverlay {
-    0% {
-        opacity: 1;
-    }
-    33.33% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
+  0% {
+    opacity: 1;
+  }
+  33.33% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 /* Controls */
 #drawer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    content: "";
-    background-color: #000;
-    z-index: 9999;
-    height: 30px;
-    width: 100%;
-    overflow: hidden;
-    transition: height 0.25s linear;
-    border-radius: 20px 20px 0 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: "";
+  background-color: #000;
+  z-index: 9999;
+  height: 30px;
+  width: 100%;
+  overflow: hidden;
+  transition: height 0.25s linear;
+  border-radius: 20px 20px 0 0;
 }
 
 #handle {
-    content: "";
-    position: absolute;
-    top: 10px;
-    border-radius: 99px;
-    width: 36px;
-    left: calc(50% - 20px);
-    height: 5px;
-    background-color: #CCC;
-    z-index: 10000;
+  content: "";
+  position: absolute;
+  top: 10px;
+  border-radius: 99px;
+  width: 36px;
+  left: calc(50% - 20px);
+  height: 5px;
+  background-color: #ccc;
+  z-index: 10000;
 }
 
 #drawer.expanded {
-    height: 50%; /* 90% of the viewport height */
+  height: 35%; /* 90% of the viewport height */
 }
 
-#drawer > .pure-g {
-    margin-top: 30px;
+#map.collapsed {
+  height: 65%;
+}
+
+#photo-grid {
+  margin-top: 40px;
+}
+
+.pure-g > div {
+  box-sizing: border-box;
+}
+.l-box {
+  padding: 1px;
 }
