@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
     map.flyTo(center, 3);
   }, 750);
 
-  "mousedown touchstart".split(" ").forEach(function(e){
+  "mousedown".split(" ").forEach(function(e){
     document.getElementById("drawer").addEventListener(e, drawerTouched);
   });
 
