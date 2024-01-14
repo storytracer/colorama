@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const center = [49, 5]
+  const center = [49, 5];
 
   const map = L.map("map", {
     center: center,
@@ -107,4 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(function () {
     map.flyTo(center, 3);
   }, 750);
+
+  document.getElementById("drawer").addEventListener("click", function () {
+    var drawer = document.getElementById("drawer");
+    drawer.classList.toggle("expanded"); // Toggle the .expanded class
+  });
 });

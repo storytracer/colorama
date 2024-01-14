@@ -63,6 +63,9 @@ body, html {
     border-radius: 10%;
     text-shadow: 1px 1px 2px #333;
 }
+
+/* Loading Overlay */
+
 /* Overlay covering the entire screen */
 .loading-overlay {
     position: fixed;
@@ -115,4 +118,32 @@ body, html {
     }
 }
 
-  
+/* Controls */
+#drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    background-color: #FFF;
+    z-index: 999;
+    opacity: 0.5;
+    height: 100px;
+    width: 100%;
+    transition: height 0.5s ease;
+}
+
+#handle {
+    content: "";
+    position: absolute;
+    bottom: 6px;
+    border-radius: 99px;
+    width: 36px;
+    left: calc(50% - 20px);
+    height: 5px;
+    background-color: #666;
+    z-index: 999;
+}
+
+#drawer.expanded {
+    height: 80vh; /* 90% of the viewport height */
+}
