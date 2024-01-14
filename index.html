@@ -39,7 +39,6 @@
             position: relative;
             width: 60px; /* Width of the cluster image */
             height: 60px; /* Height of the cluster image */
-            border-radius: 50%;
         }
         
         .cluster-marker img, .photo-marker img {
@@ -51,11 +50,16 @@
             /* box-shadow: 3px 3px 5px -2px #333; */
         }
 
-        .cluster-marker, .photo-marker {
-            border-radius: 10px;
+        .photo-marker {
+            border-radius: 10%;
         }
 
-        .marker-count-badge {
+        .cluster-marker {
+            border-radius: 10%;
+            background-size: 60px 60px;
+        }
+
+        .photo-marker .marker-count-badge {
             position: absolute;
             top: 0;
             right: 0;
@@ -68,6 +72,21 @@
             font-size: 12px;
             font-weight: bold;
         }
+
+        .cluster-marker .marker-count-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            line-height: 60px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #FFF;
+            width: 60px;
+            text-align: center;
+            background-color: transparent;
+            border-radius: 10px;
+            text-shadow: 1px 1px 2px #333;
+        }
     </style>
 </head>
 <body>
@@ -77,8 +96,8 @@
         document.addEventListener('DOMContentLoaded', function () {
         const map = L.map('map', {
             center: [49, 5],
-            maxZoom: 18,
-            zoom: 3,
+            maxZoom: 16,
+            zoom: 2,
         });
 
         const photoSize = 60;
@@ -91,7 +110,8 @@
         const markers = L.markerClusterGroup({
             iconCreateFunction: createClusterCustomIcon,
             showCoverageOnHover: false,
-            maxClusterRadius: 70,
+            zoomToBoundsOnClick: true,
+            spiderfyOnMaxZoom: false,
         });
 
         // Replace this with the path to your GeoJSON file
