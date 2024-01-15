@@ -12,35 +12,22 @@ $(function () {
     attributionControl: false,
   });
 
-  var toner = protomapsL.Toner();
+  var gl = L.maplibreGL({
+    style: '/maps/dataviz_grey.json'
+  }).addTo(map);
 
-  // Styling the Toner basemap
-  var paint_rules = toner.paint_rules.slice();
-  var label_rules = toner.label_rules.slice();
-
-  paint_rules[0].symbolizer.fill.str = "#eeeeee"; // Land color
-  paint_rules[2].symbolizer.fill.str = "#333333"; // Water color
-
-  paint_rules.splice(7, 3); // Remove roads
-
-  label_rules.splice(0, 2); // Remove country and state labels
-  label_rules.splice(4, 3); // Remove landuse, road and poi labels
-
-  var pm = protomapsL.leafletLayer({
-    url: "https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043",
-    paint_rules: paint_rules,
-    label_rules: label_rules,
-    tasks: toner.tasks,
-    attribution:
-      '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
+  var maplibreMap = gl.getMaplibreMap();
+  maplibreMap.on('load', () => {
+    maplibreMap.setLayoutProperty('boundaries', 'visibility', 'none');
+    maplibreMap.setLayoutProperty('roads_highway', 'visibility', 'none');
   });
-  pm.addTo(map);
 
   var attribution = L.control
     .attribution({
       position: "bottomright",
     })
     .addTo(map);
+  attribution.addAttribution("<a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>");
 
   L.control
     .zoom({
@@ -189,10 +176,6 @@ $(function () {
       iconSize: L.point(60, 60), // Includes the height of the triangle
     });
   }
-
-  setTimeout(function () {
-    map.flyTo(center, 3);
-  }, 750);
 
   function openDrawer() {
     if (!$("#drawer").hasClass("expanded")) {

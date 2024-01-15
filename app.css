@@ -4,7 +4,7 @@ html {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #eeeeee;
+  background-color: #cccccc;
 }
 
 #map {
@@ -88,12 +88,12 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #eeeeee;
+  background-color: #cccccc;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 99999; /* High z-index to ensure it's on top */
-  animation: fadeOutOverlay 2s ease forwards;
+  animation: fadeOutOverlay 2.5s ease forwards;
 }
 
 /* Spinning color wheel */
