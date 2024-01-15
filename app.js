@@ -150,7 +150,7 @@ $(function () {
         if (photoElements.length > 15) {
           setTimeout(function() {
             gallery.refresh(photoElements);
-          }, 500);
+          }, 1000);
         }
       });
   }

@@ -7,6 +7,14 @@ html {
   background-color: #cccccc;
 }
 
+html.lg-on, .lg-container {
+  overscroll-behavior: none;
+}
+
+#gallery {
+  overscroll-behavior: none;
+}
+
 #map {
   height: 100%;
   width: 100%;
