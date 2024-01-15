@@ -40,6 +40,7 @@ $(function () {
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
+    disableClusteringAtZoom: 18,
   });
   // clusters.on('clusterclick', function (a) {
   //   a.layer.zoomToBounds();
