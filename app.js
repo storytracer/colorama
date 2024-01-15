@@ -1,11 +1,11 @@
 $(function () {
-  const center = [49, 5];
+  const center = [25, 10];
 
   const map = L.map("map", {
     center: center,
-    minZoom: 3,
+    minZoom: 2,
     maxZoom: 18,
-    zoom: 3,
+    zoom: 2,
     zoomControl: false,
     scrollWheelZoom: false,
     smoothWheelZoom: true,
@@ -15,18 +15,21 @@ $(function () {
   var toner = protomapsL.Toner();
   
   // Styling the Toner basemap
-  var custom_paint_rules = toner.paint_rules.slice();
+  var paint_rules = toner.paint_rules.slice();
+  var label_rules = toner.label_rules.slice();
 
-  custom_paint_rules[0].symbolizer.fill.str = "#eeeeee"; // Land color
-  custom_paint_rules[2].symbolizer.fill.str = "#333333"; // Water color
+  paint_rules[0].symbolizer.fill.str = "#eeeeee"; // Land color
+  paint_rules[2].symbolizer.fill.str = "#333333"; // Water color
 
-  // Removing roads
-  custom_paint_rules.splice(7, 3)
+  paint_rules.splice(7, 3); // Remove roads
+
+  label_rules.splice(0, 2); // Remove country and state labels
+  label_rules.splice(4, 3); // Remove landuse, road and poi labels
 
   var pm = protomapsL.leafletLayer({
     url: 'https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043',
-    paint_rules: custom_paint_rules, 
-    label_rules: toner.label_rules,
+    paint_rules: paint_rules, 
+    label_rules: label_rules,
     tasks: toner.tasks,
     attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
   });
@@ -126,7 +129,7 @@ $(function () {
                 filename;
               const subHtml = `
                 <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}" target="_blank">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong>${feature.properties.license}</p>
+                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong>${feature.properties.license}</p>
               `;
               const dataElement = {
                 src: fullImageUrl,
@@ -148,7 +151,7 @@ $(function () {
           preload: 0,
           mobileSettings: {
             controls: false,
-            download: false,
+            download: true,
             showMaximizeIcon: false,
             showCloseIcon: true,
           },
@@ -182,7 +185,7 @@ $(function () {
   }
 
   setTimeout(function () {
-    map.flyTo(center, 4);
+    map.flyTo(center, 3);
   }, 750);
 
   function openDrawer() {
