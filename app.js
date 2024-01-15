@@ -146,9 +146,10 @@ $(function () {
           plugins: [lgZoom, lgThumbnail],
           dynamic: true,
           dynamicEl: photoElements,
+          loop: false,
           showAfterLoad: false,
           animateThumb: true,
-          preload: 0,
+          preload: 1,
           mobileSettings: {
             controls: false,
             download: true,
