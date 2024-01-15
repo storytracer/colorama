@@ -13,7 +13,7 @@ $(function () {
   });
 
   var toner = protomapsL.Toner();
-  
+
   // Styling the Toner basemap
   var paint_rules = toner.paint_rules.slice();
   var label_rules = toner.label_rules.slice();
@@ -27,11 +27,12 @@ $(function () {
   label_rules.splice(4, 3); // Remove landuse, road and poi labels
 
   var pm = protomapsL.leafletLayer({
-    url: 'https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043',
-    paint_rules: paint_rules, 
+    url: "https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043",
+    paint_rules: paint_rules,
     label_rules: label_rules,
     tasks: toner.tasks,
-    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution:
+      '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
   });
   pm.addTo(map);
 
@@ -145,11 +146,10 @@ $(function () {
         const gallery = lightGallery(document.getElementById("gallery"), {
           plugins: [lgZoom, lgThumbnail],
           dynamic: true,
-          dynamicEl: photoElements,
+          dynamicEl: photoElements.slice(0, 15),
           loop: false,
           showAfterLoad: false,
           animateThumb: true,
-          preload: 1,
           mobileSettings: {
             controls: false,
             download: true,
@@ -159,6 +159,7 @@ $(function () {
         });
 
         gallery.openGallery();
+        gallery.refresh(photoElements);
       });
   }
 
