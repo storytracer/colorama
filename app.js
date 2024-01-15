@@ -110,14 +110,15 @@ $(function () {
               const imageUrl =
                 "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:512:512/plain/local:///kahn/" +
                 filename;
-              const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
+              const fullImageUrl = "https://images.colorama.app/unsigned/resize:fit:2000:2000/plain/local:///kahn/" + filename;
               const imageHTML = `
               <div class="pure-u-1-4 pure-u-lg-1-8 l-box photo">
-                <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html="
-                  <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                  <p><strong>Date: </strong>${feature.properties.capture_date_earliest} – ${feature.properties.capture_date_latest}</p>
-                ">
+                <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html=".caption">
                   <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
+                  <div class="caption">
+                    <p><strong>Caption: </strong>${feature.properties.caption}</p>
+                    <p><strong>Date: </strong>${feature.properties.capture_date_earliest} – ${feature.properties.capture_date_latest}</p>
+                  </div>
                 </a>
               </div>`;
               grid.append(imageHTML);
@@ -128,7 +129,15 @@ $(function () {
 
         const gallery = lightGallery(document.getElementById('photo-grid'), {
           plugins: [lgZoom, lgThumbnail],
-          selector: '.photo-link'
+          selector: '.photo-link',
+          subHtmlSelectorRelative: true,
+          preload: 0,
+          mobileSettings: {
+            controls: false,
+            download: false,
+            showMaximizeIcon: false,
+            showCloseIcon: true,
+          }
         });
         gallery.openGallery();
       });
