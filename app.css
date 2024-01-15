@@ -13,6 +13,16 @@ html {
   transition: height 0.25s linear;
 }
 
+.leaflet-container .leaflet-control-attribution a {
+  color: #333;
+}
+
+.leaflet-container .leaflet-control-attribution {
+  background: transparent !important;
+  margin-top: 5px !important;
+  margin-left: 5px !important;
+}
+
 .cluster-marker,
 .photo-marker {
   position: relative;
@@ -131,7 +141,7 @@ html {
   content: "";
   background-color: #000;
   z-index: 9999;
-  height: 30px;
+  height: 0;
   width: 100%;
   overflow: hidden;
   transition: height 0.25s linear;

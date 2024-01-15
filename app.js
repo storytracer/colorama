@@ -35,11 +35,14 @@ $(function () {
   const imageUrlPrefix =
     "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/";
 
-  const markers = L.markerClusterGroup({
+  const clusters = L.markerClusterGroup({
     iconCreateFunction: createClusterCustomIcon,
     showCoverageOnHover: false,
-    zoomToBoundsOnClick: true,
+    zoomToBoundsOnClick: false,
     spiderfyOnMaxZoom: false,
+  });
+  clusters.on('clusterclick', function (a) {
+    a.layer.zoomToBounds();
   });
 
   // Replace this with the path to your GeoJSON file
@@ -55,11 +58,11 @@ $(function () {
             let marker = createMarker(feature, layer.getLatLng());
             marker.options.photo_count = feature.properties.count;
             marker.options.image_file = feature.properties.image_file;
-            markers.addLayer(marker);
+            clusters.addLayer(marker);
           }
         },
       });
-      map.addLayer(markers);
+      map.addLayer(clusters);
     });
 
   function createMarker(feature, latlng) {
@@ -90,7 +93,7 @@ $(function () {
   function showPhotosForFeature(feature) {
     console.log(feature);
     map.panTo([feature.properties.latitude, feature.properties.longitude]);
-    openDrawer();
+    // openDrawer();
     var geohash = feature.properties.geohash;
     var geojsonUrl =
       "https://features.colorama.app/collections/public.photos/items.json?geohash=" +
@@ -107,13 +110,24 @@ $(function () {
               const imageUrl =
                 "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:512:512/plain/local:///kahn/" +
                 filename;
-              const imageHTML = `<div class="pure-u-1-4 pure-u-lg-1-8 l-box">
-              <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
+              const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
+              const imageHTML = `
+              <div class="pure-u-1-4 pure-u-lg-1-8 l-box photo">
+                <a class="photo-link" href="${fullImageUrl}" target="_blank">
+                  <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
+                </a>
               </div>`;
               grid.append(imageHTML);
             }
           },
         });
+
+
+        const gallery = lightGallery(document.getElementById('photo-grid'), {
+          plugins: [lgZoom, lgThumbnail],
+          selector: '.photo-link'
+        });
+        gallery.openGallery();
       });
   }
 
@@ -168,4 +182,9 @@ $(function () {
     mapElement.toggleClass("collapsed"); // Toggle the .expanded class
     panMapForDrawer();
   }
+
+  lightGallery(document.getElementById('photo-grid'), {
+    thumbnail: true,
+    selector: '.photo-link'
+  });
 });
