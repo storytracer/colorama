@@ -130,11 +130,12 @@ $(function () {
             }
           },
         });
-
-        const gallery = lightGallery(document.getElementById("gallery"), {
+        
+        const $gallery = $("#gallery");
+        const gallery = lightGallery($gallery, {
           plugins: [lgZoom, lgThumbnail],
           dynamic: true,
-          dynamicEl: photoElements.slice(0, 15),
+          dynamicEl: photoElements.slice(0, 20),
           loop: false,
           showAfterLoad: false,
           animateThumb: true,
@@ -147,7 +148,7 @@ $(function () {
         });
 
         gallery.openGallery();
-        if (photoElements.length > 15) {
+        if (photoElements.length > 20) {
           setTimeout(function() {
             gallery.refresh(photoElements);
           }, 1000);
