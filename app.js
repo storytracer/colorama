@@ -3,7 +3,7 @@ $(function () {
 
   const map = L.map("map", {
     center: center,
-    maxZoom: 16,
+    maxZoom: 18,
     zoom: 1,
     zoomControl: false,
     scrollWheelZoom: false,
@@ -38,12 +38,12 @@ $(function () {
   const clusters = L.markerClusterGroup({
     iconCreateFunction: createClusterCustomIcon,
     showCoverageOnHover: false,
-    zoomToBoundsOnClick: false,
+    zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
   });
-  clusters.on('clusterclick', function (a) {
-    a.layer.zoomToBounds();
-  });
+  // clusters.on('clusterclick', function (a) {
+  //   a.layer.zoomToBounds();
+  // });
 
   // Replace this with the path to your GeoJSON file
   const geojsonUrl =
@@ -192,9 +192,4 @@ $(function () {
     mapElement.toggleClass("collapsed"); // Toggle the .expanded class
     panMapForDrawer();
   }
-
-  lightGallery(document.getElementById('photo-grid'), {
-    thumbnail: true,
-    selector: '.photo-link'
-  });
 });
