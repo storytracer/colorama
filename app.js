@@ -110,7 +110,7 @@ $(function () {
               const imageUrl =
                 "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:512:512/plain/local:///kahn/" +
                 filename;
-              const fullImageUrl = "https://images.colorama.app/unsigned/resize:fit:2000:2000/plain/local:///kahn/" + filename;
+              const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
               const imageHTML = `
               <div class="pure-u-1-4 pure-u-lg-1-8 l-box photo">
                 <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html=".caption">
@@ -131,7 +131,7 @@ $(function () {
           plugins: [lgZoom, lgThumbnail],
           selector: '.photo-link',
           subHtmlSelectorRelative: true,
-          preload: 0,
+          preload: 1,
           mobileSettings: {
             controls: false,
             download: false,
