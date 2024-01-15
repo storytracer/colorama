@@ -113,7 +113,10 @@ $(function () {
               const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
               const imageHTML = `
               <div class="pure-u-1-4 pure-u-lg-1-8 l-box photo">
-                <a class="photo-link" href="${fullImageUrl}" target="_blank">
+                <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html="
+                  <p><strong>Caption: </strong>${feature.properties.caption}</p>
+                  <p><strong>Date: </strong>${feature.properties.capture_date_earliest} – ${feature.properties.capture_date_latest}</p>
+                ">
                   <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
                 </a>
               </div>`;
