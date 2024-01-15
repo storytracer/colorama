@@ -159,7 +159,11 @@ $(function () {
         });
 
         gallery.openGallery();
-        gallery.refresh(photoElements);
+        if (photoElements.length > 15) {
+          setTimeout(function() {
+            gallery.refresh(photoElements);
+          }, 500);
+        }
       });
   }
 
