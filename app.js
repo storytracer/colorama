@@ -93,13 +93,12 @@ $(function () {
   function showPhotosForFeature(feature) {
     console.log(feature);
     map.panTo([feature.properties.latitude, feature.properties.longitude]);
-    // openDrawer();
     var geohash = feature.properties.geohash;
     var geojsonUrl =
       "https://features.colorama.app/collections/public.photos/items.json?geohash=" +
       geohash;
-    const grid = $("#photo-grid");
-    grid.html("");
+
+    let photoElements = [];
     fetch(geojsonUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -108,24 +107,28 @@ $(function () {
             if (feature.properties && feature.properties["image.filename"]) {
               const filename = feature.properties["image.filename"];
               const thumbUrl = thumbUrlPrefix + filename;
-              const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
-              const imageHTML = `
-                <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html=".caption">
-                  <img src="${thumbUrl}" width="128" height="128" alt="" />
-                  <div class="caption">
-                    <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                    <p><strong>Date: </strong>${feature.properties.capture_date_earliest} – ${feature.properties.capture_date_latest}</p>
-                  </div>
-                </a>`;
-              grid.append(imageHTML);
+              const fullImageUrl =
+                "https://images.colorama.app/unsigned/plain/local:///kahn/" +
+                filename;
+              const subHtml = `
+                <p><strong>Caption (translated): </strong>${feature.properties.caption}</p>
+                <p><strong>Date: Between </strong>${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Source: </strong><a href="${feature.properties.doc_url}" target="_blank">Musée Albert Kahn</a></p>
+              `;
+              const dataElement = {
+                src: fullImageUrl,
+                thumb: thumbUrl,
+                subHtml: subHtml,
+              };
+
+              photoElements.push(dataElement);
             }
           },
         });
 
-        const gallery = lightGallery(document.getElementById('photo-grid'), {
+        const gallery = lightGallery(document.getElementById("gallery"), {
           plugins: [lgZoom, lgThumbnail],
-          selector: '.photo-link',
-          subHtmlSelectorRelative: true,
+          dynamic: true,
+          dynamicEl: photoElements,
           showAfterLoad: false,
           animateThumb: true,
           preload: 0,
@@ -134,7 +137,7 @@ $(function () {
             download: false,
             showMaximizeIcon: false,
             showCloseIcon: true,
-          }
+          },
         });
 
         gallery.openGallery();
