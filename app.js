@@ -44,7 +44,7 @@ $(function () {
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
-    disableClusteringAtZoom: 11,
+    disableClusteringAtZoom: 12,
     maxClusterRadius: 100,
   });
   // clusters.on('clusterclick', function (a) {
