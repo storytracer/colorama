@@ -112,8 +112,8 @@ $(function () {
                 "https://images.colorama.app/unsigned/plain/local:///kahn/" +
                 filename;
               const subHtml = `
-                <p><strong>Caption (translated): </strong>${feature.properties.caption}</p>
-                <p><strong>Date: Between </strong>${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Source: </strong><a href="${feature.properties.doc_url}" target="_blank">Musée Albert Kahn</a></p>
+                <p><strong>Caption: </strong>${feature.properties.caption}</p>
+                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}" target="_blank">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong>${feature.properties.license}</p>
               `;
               const dataElement = {
                 src: fullImageUrl,
