@@ -11,21 +11,17 @@ $(function () {
     attributionControl: false,
   });
 
-  // var gl = L.maplibreGL({
-  //   style:
-  //     "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
-  // }).addTo(map);
-
   var toner = protomapsL.Toner();
-  console.log(toner.paint_rules);
   
+  // Styling the Toner basemap
   var custom_paint_rules = toner.paint_rules.slice();
-  custom_paint_rules[0].symbolizer.fill.str = "#eeeeee";
-  custom_paint_rules[2].symbolizer.fill.str = "#333333";
 
+  custom_paint_rules[0].symbolizer.fill.str = "#eeeeee"; // Land color
+  custom_paint_rules[2].symbolizer.fill.str = "#333333"; // Water color
+
+  // Removing roads
   custom_paint_rules.splice(7, 3)
 
-  console.log(custom_paint_rules);
   var pm = protomapsL.leafletLayer({
     url: 'https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043',
     paint_rules: custom_paint_rules, 
