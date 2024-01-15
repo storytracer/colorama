@@ -32,8 +32,8 @@ $(function () {
     .addTo(map);
 
   const photoSize = 60;
-  const imageUrlPrefix =
-    "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:150:150/plain/local:///kahn/";
+  const thumbUrlPrefix =
+    "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:128:128/plain/local:///kahn/";
 
   const clusters = L.markerClusterGroup({
     iconCreateFunction: createClusterCustomIcon,
@@ -68,7 +68,7 @@ $(function () {
   function createMarker(feature, latlng) {
     const imageFile = feature.properties.image_file;
     const photoCount = feature.properties.count;
-    const imageUrl = imageUrlPrefix + imageFile;
+    const imageUrl = thumbUrlPrefix + imageFile;
 
     const html = `
                 <div class="photo-marker">
@@ -107,31 +107,28 @@ $(function () {
           onEachFeature: (feature, layer) => {
             if (feature.properties && feature.properties["image.filename"]) {
               const filename = feature.properties["image.filename"];
-              const imageUrl =
-                "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:512:512/plain/local:///kahn/" +
-                filename;
+              const thumbUrl = thumbUrlPrefix + filename;
               const fullImageUrl = "https://images.colorama.app/unsigned/plain/local:///kahn/" + filename;
               const imageHTML = `
-              <div class="pure-u-1-4 pure-u-lg-1-8 l-box photo">
                 <a class="photo-link" href="${fullImageUrl}" target="_blank" data-sub-html=".caption">
-                  <img class="pure-img" src="${imageUrl}" width="512" height="512" alt="" />
+                  <img src="${thumbUrl}" width="128" height="128" alt="" />
                   <div class="caption">
                     <p><strong>Caption: </strong>${feature.properties.caption}</p>
                     <p><strong>Date: </strong>${feature.properties.capture_date_earliest} – ${feature.properties.capture_date_latest}</p>
                   </div>
-                </a>
-              </div>`;
+                </a>`;
               grid.append(imageHTML);
             }
           },
         });
 
-
         const gallery = lightGallery(document.getElementById('photo-grid'), {
           plugins: [lgZoom, lgThumbnail],
           selector: '.photo-link',
           subHtmlSelectorRelative: true,
-          preload: 1,
+          showAfterLoad: false,
+          animateThumb: true,
+          preload: 0,
           mobileSettings: {
             controls: false,
             download: false,
@@ -139,6 +136,7 @@ $(function () {
             showCloseIcon: true,
           }
         });
+
         gallery.openGallery();
       });
   }
@@ -147,7 +145,7 @@ $(function () {
     const children = cluster.getAllChildMarkers();
     const firstChild = children.length ? children[0] : null;
     const firstChildImageFile = firstChild.options.image_file;
-    const imageUrl = imageUrlPrefix + firstChildImageFile;
+    const imageUrl = thumbUrlPrefix + firstChildImageFile;
     const photoCount = children.reduce((total, child) => {
       return total + child.options.photo_count;
     }, 0);
