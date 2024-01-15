@@ -3,6 +3,7 @@ $(function () {
 
   const map = L.map("map", {
     center: center,
+    minZoom: 3,
     maxZoom: 18,
     zoom: 3,
     zoomControl: false,
