@@ -4,26 +4,42 @@ $(function () {
   const map = L.map("map", {
     center: center,
     maxZoom: 18,
-    zoom: 1,
+    zoom: 3,
     zoomControl: false,
     scrollWheelZoom: false,
     smoothWheelZoom: true,
     attributionControl: false,
   });
 
-  var gl = L.maplibreGL({
-    style:
-      "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
-  }).addTo(map);
+  // var gl = L.maplibreGL({
+  //   style:
+  //     "https://api.maptiler.com/maps/92f61733-11cf-4c28-9191-a7d071f85ea4/style.json?key=Uw1F9DMKKQO925wMgQel",
+  // }).addTo(map);
+
+  var toner = protomapsL.Toner();
+  console.log(toner.paint_rules);
+  
+  var custom_paint_rules = toner.paint_rules.slice();
+  custom_paint_rules[0].symbolizer.fill.str = "#eeeeee";
+  custom_paint_rules[2].symbolizer.fill.str = "#333333";
+
+  custom_paint_rules.splice(7, 3)
+
+  console.log(custom_paint_rules);
+  var pm = protomapsL.leafletLayer({
+    url: 'https://api.protomaps.com/tiles/v2/{z}/{x}/{y}.pbf?key=9dd9b39bd8cb2043',
+    paint_rules: custom_paint_rules, 
+    label_rules: toner.label_rules,
+    tasks: toner.tasks,
+    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+  pm.addTo(map);
 
   var attribution = L.control
     .attribution({
       position: "bottomright",
     })
     .addTo(map);
-  attribution.addAttribution(
-    '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-  );
 
   L.control
     .zoom({
@@ -169,7 +185,7 @@ $(function () {
   }
 
   setTimeout(function () {
-    map.flyTo(center, 3);
+    map.flyTo(center, 4);
   }, 750);
 
   function openDrawer() {
