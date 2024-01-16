@@ -12,6 +12,15 @@ $(function () {
     attributionControl: false,
   });
 
+  function licenseLink(license) {
+    switch(license) {
+      case 'CC-BY-4.0':
+        return 'https://creativecommons.org/licenses/by/4.0/'
+      case 'CC0':
+        return 'https://creativecommons.org/publicdomain/zero/1.0/'
+    }
+  }
+
   var gl = L.maplibreGL({
     style: '/maps/dataviz_grey.json'
   }).addTo(map);
@@ -25,9 +34,10 @@ $(function () {
   const gallery = lightGallery(document.getElementById("gallery"), {
     plugins: [lgZoom, lgThumbnail],
     dynamic: true,
+    dynamicEl: [{}], // Needs to contain an empty object on init, otherwise media overlaps
     loop: false,
-    showAfterLoad: false,
     animateThumb: true,
+    allowMediaOverlap: false,
     mobileSettings: {
       controls: false,
       download: true,
@@ -58,7 +68,7 @@ $(function () {
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
-    disableClusteringAtZoom: 12,
+    disableClusteringAtZoom: 14,
     maxClusterRadius: 100,
   });
   // clusters.on('clusterclick', function (a) {
@@ -101,7 +111,7 @@ $(function () {
       icon: L.divIcon({
         html: html,
         className: "", // Important: this removes default Leaflet icon styling
-        iconSize: L.point(60, 60), // Includes the height of the triangle
+        iconSize: L.point(photoSize, photoSize), // Includes the height of the triangle
       }),
     }).on("click", function () {
       showPhotosForFeature(feature);
@@ -130,9 +140,10 @@ $(function () {
               const fullImageUrl =
                 "https://images.colorama.app/unsigned/plain/local:///kahn/" +
                 filename;
+              const license = feature.properties.license;
               const subHtml = `
                 <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong>${feature.properties.license}</p>
+                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong><a href="${licenseLink(license)}">${license}</a></p>
               `;
               const dataElement = {
                 src: fullImageUrl,
@@ -174,32 +185,7 @@ $(function () {
     return L.divIcon({
       html: html,
       className: "", // Important: this removes default Leaflet icon styling
-      iconSize: L.point(60, 60), // Includes the height of the triangle
+      iconSize: L.point(photoSize, photoSize), // Includes the height of the triangle
     });
-  }
-
-  function openDrawer() {
-    if (!$("#drawer").hasClass("expanded")) {
-      toggleDrawer();
-    }
-  }
-
-  function panMapForDrawer() {
-    var drawerElement = $("#drawer");
-    var mapElement = $("#map");
-    if (drawerElement.hasClass("expanded")) {
-      map.panBy([0, 200], { easeLinearity: 1 });
-    } else {
-      map.panBy([0, -200]);
-    }
-  }
-
-  function toggleDrawer() {
-    var drawerElement = $("#drawer");
-    var mapElement = $("#map");
-
-    drawerElement.toggleClass("expanded"); // Toggle the .expanded class
-    mapElement.toggleClass("collapsed"); // Toggle the .expanded class
-    panMapForDrawer();
   }
 });
