@@ -21,6 +21,17 @@ $(function () {
     }
   }
 
+  function formattedDateSpan(earlyDateString, lateDateString) {
+    const earlyDate = new Date(earlyDateString).getTime();
+    const lateDate = new Date(lateDateString).getTime();
+
+    if (earlyDate == lateDate) {
+      return earlyDateString
+    } else {
+      return earlyDateString + ' - ' + lateDateString
+    }
+  }
+
   var gl = L.maplibreGL({
     style: '/maps/dataviz_grey.json'
   }).addTo(map);
@@ -143,7 +154,7 @@ $(function () {
               const license = feature.properties.license;
               const subHtml = `
                 <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong><a href="${licenseLink(license)}" target="_blank">${license}</a></p>
+                <p><strong>Date: </strong>${formattedDateSpan(feature.properties.capture_date_earliest, feature.properties.capture_date_latest)} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}" target="_blank">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong><a href="${licenseLink(license)}" target="_blank">${license}</a></p>
               `;
               const dataElement = {
                 src: fullImageUrl,
