@@ -79,7 +79,6 @@ $(function () {
     showCoverageOnHover: false,
     zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
-    disableClusteringAtZoom: 14,
     maxClusterRadius: 100,
   });
   // clusters.on('clusterclick', function (a) {
