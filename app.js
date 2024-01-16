@@ -143,7 +143,7 @@ $(function () {
               const license = feature.properties.license;
               const subHtml = `
                 <p><strong>Caption: </strong>${feature.properties.caption}</p>
-                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong><a href="${licenseLink(license)}">${license}</a></p>
+                <p><strong>Date: </strong>between ${feature.properties.capture_date_earliest} and ${feature.properties.capture_date_latest} | <strong>Photographer: </strong>${feature.properties.operators[0]} | <strong>Source:&nbsp;</strong><a href="${feature.properties.doc_url}">Musée&nbsp;Albert&nbsp;Kahn</a> | <strong>License: </strong><a href="${licenseLink(license)}" target="_blank">${license}</a></p>
               `;
               const dataElement = {
                 src: fullImageUrl,
