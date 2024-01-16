@@ -22,6 +22,20 @@ $(function () {
     maplibreMap.setLayoutProperty('roads_highway', 'visibility', 'none');
   });
 
+  const gallery = lightGallery(document.getElementById("gallery"), {
+    plugins: [lgZoom, lgThumbnail],
+    dynamic: true,
+    loop: false,
+    showAfterLoad: false,
+    animateThumb: true,
+    mobileSettings: {
+      controls: false,
+      download: true,
+      showMaximizeIcon: false,
+      showCloseIcon: true,
+    },
+  });
+
   var attribution = L.control
     .attribution({
       position: "bottomright",
@@ -130,23 +144,8 @@ $(function () {
             }
           },
         });
-        
-        const $gallery = $("#gallery");
-        const gallery = lightGallery($gallery, {
-          plugins: [lgZoom, lgThumbnail],
-          dynamic: true,
-          dynamicEl: photoElements.slice(0, 20),
-          loop: false,
-          showAfterLoad: false,
-          animateThumb: true,
-          mobileSettings: {
-            controls: false,
-            download: true,
-            showMaximizeIcon: false,
-            showCloseIcon: true,
-          },
-        });
-
+          
+        gallery.refresh(photoElements.slice(0, 20));
         gallery.openGallery();
         if (photoElements.length > 20) {
           setTimeout(function() {
