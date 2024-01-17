@@ -4,7 +4,7 @@ $(function () {
   const map = L.map("map", {
     center: center,
     minZoom: 2,
-    maxZoom: 18,
+    maxZoom: 20,
     zoom: 2,
     zoomControl: false,
     scrollWheelZoom: false,
@@ -42,10 +42,12 @@ $(function () {
     maplibreMap.setLayoutProperty('roads_highway', 'visibility', 'none');
   });
 
-  const gallery = lightGallery(document.getElementById("gallery"), {
+  const galleryElement = $("#gallery")[0];
+
+  const gallery = lightGallery(galleryElement, {
     plugins: [lgZoom, lgThumbnail],
     dynamic: true,
-    dynamicEl: [{}], // Needs to contain an empty object on init, otherwise media overlaps
+    dynamicEl: [],
     loop: false,
     animateThumb: true,
     allowMediaOverlap: false,
@@ -131,7 +133,6 @@ $(function () {
   }
 
   function showPhotosForFeature(feature) {
-    console.log(feature);
     map.panTo([feature.properties.latitude, feature.properties.longitude]);
     var geohash = feature.properties.geohash;
     var geojsonUrl =
