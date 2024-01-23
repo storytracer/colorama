@@ -27,8 +27,8 @@ html.lg-on, .lg-container {
 
 .leaflet-container .leaflet-control-attribution {
   background: transparent !important;
-  margin-top: 5px !important;
-  margin-left: 5px !important;
+  margin-right: 5px !important;
+  margin-bottom: 5px !important;
 }
 
 .cluster-marker,
@@ -141,52 +141,6 @@ html.lg-on, .lg-container {
   }
 }
 
-/* Controls */
-#drawer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  content: "";
-  background-color: #000;
-  z-index: 9999;
-  height: 0;
-  width: 100%;
-  overflow: hidden;
-  transition: height 0.25s linear;
-  border-radius: 20px 20px 0 0;
-}
-
-#handle {
-  content: "";
-  position: absolute;
-  top: 10px;
-  border-radius: 99px;
-  width: 36px;
-  left: calc(50% - 20px);
-  height: 5px;
-  background-color: #ccc;
-  z-index: 10000;
-}
-
-#drawer.expanded {
-  height: 35%; /* 90% of the viewport height */
-}
-
-#map.collapsed {
-  height: 65%;
-}
-
-#photo-grid {
-  margin-top: 40px;
-}
-
-.pure-g > div {
-  box-sizing: border-box;
-}
-.l-box {
-  padding: 1px;
-}
-
 /* Menu bar */
 
 .bottom-nav {
@@ -195,14 +149,13 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
+  background-color: #ccc;
+  border-top: 1px solid #6b7280;
   height: 3rem;
   z-index: 999;
 }
 
 .nav-item:first-of-type {
-  border-left: 1px solid #ccc;
 }
 
 .nav-item {
@@ -210,9 +163,8 @@ html.lg-on, .lg-container {
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: #6b7280; /* Adjust color as needed */
+  color: #5c5c5c; /* Adjust color as needed */
   width: 4rem;
-  border-right: 1px solid #ccc;
   padding: 0.5rem;
 }
 
