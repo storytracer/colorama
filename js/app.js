@@ -209,8 +209,8 @@ $(function () {
 
   function calculateFlyToDuration(currentCenter, targetLatLng) {
     // Constants for tuning the calculation
-    const minDuration = 1; // Minimum duration in seconds
-    const maxDuration = 5; // Maximum duration in seconds
+    const minDuration = 4; // Minimum duration in seconds
+    const maxDuration = 8; // Maximum duration in seconds
     const distanceFactor = 0.0005; // Adjust this to change duration scaling with distance
   
     // Calculate the geographical distance between the two points (in meters)
@@ -226,38 +226,68 @@ $(function () {
     return duration;
   }
   
-  // Example usage within the shufflePhotos function
-  function shuffleMarker() {
+  function shuffleRandomMarker() {
     const markers = clusters.getLayers();
     if (markers.length > 0) {
       const randomIndex = Math.floor(Math.random() * markers.length);
       const selectedMarker = markers[randomIndex];
-  
-      const currentZoom = map.getZoom();
-      const targetZoom = 16; // Example target zoom level
+      flyToMarker(selectedMarker);
+    } else {
+      console.log("No markers available to shuffle.");
+    }
+  }
+
+  function shuffleDistantMarker() {
+    const markers = clusters.getLayers();
+    if (markers.length > 0) {
       const currentCenter = map.getCenter();
-      const targetLatLng = selectedMarker.getLatLng();
-  
-      const duration = calculateFlyToDuration(currentCenter, targetLatLng);
-  
-      map.flyTo(targetLatLng, targetZoom, {
-        animate: true,
-        easeLinearity: 1,
-        duration: duration
+      let weightedMarkers = markers.map(marker => {
+        const distance = currentCenter.distanceTo(marker.getLatLng());
+        return { marker, weight: distance };
       });
   
-      /* Disable auto click
-      map.once('zoomend', function() {
-        setTimeout(function() {
-          selectedMarker.fire('click');
-        }, 1000);
-      });
-      */
+      // Normalize weights
+      const totalWeight = weightedMarkers.reduce((total, wm) => total + wm.weight, 0);
+      weightedMarkers = weightedMarkers.map(wm => ({ marker: wm.marker, weight: wm.weight / totalWeight }));
+  
+      // Select a marker based on the weights
+      let sum = 0;
+      const r = Math.random();
+      for (const wm of weightedMarkers) {
+        sum += wm.weight;
+        if (r <= sum) {
+          flyToMarker(wm.marker);
+          break;
+        }
+      }
     } else {
       console.log("No markers available to shuffle.");
     }
   }
   
-  // ... Rest of your code ...
+  function shuffleMarker() {
+    shuffleDistantMarker();
+  }
+
+  function flyToMarker(selectedMarker) {
+    const currentZoom = map.getZoom();
+    const targetZoom = 16; // Example target zoom level
+    const currentCenter = map.getCenter();
+    const targetLatLng = selectedMarker.getLatLng();
+  
+    const duration = calculateFlyToDuration(currentCenter, targetLatLng);
+  
+    map.flyTo(targetLatLng, targetZoom, {
+      animate: true,
+      easeLinearity: 1,
+      duration: duration
+    });
+  
+    map.once('zoomend', function() {
+      setTimeout(function() {
+        selectedMarker.fire('click');
+      }, 500);
+    });
+  }
   
 });
