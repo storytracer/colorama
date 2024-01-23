@@ -50,6 +50,7 @@ $(function () {
     dynamicEl: [{src: "/favicon-32x32.png"}], // Needs to contain an object on init, otherwise media overlaps
     loop: false,
     animateThumb: true,
+    toggleThumb: false,
     allowMediaOverlap: false,
     mobileSettings: {
       controls: false,
@@ -208,7 +209,7 @@ $(function () {
 
   function calculateFlyToDuration(currentCenter, targetLatLng) {
     // Constants for tuning the calculation
-    const minDuration = 2; // Minimum duration in seconds
+    const minDuration = 1; // Minimum duration in seconds
     const maxDuration = 5; // Maximum duration in seconds
     const distanceFactor = 0.0005; // Adjust this to change duration scaling with distance
   
@@ -245,11 +246,13 @@ $(function () {
         duration: duration
       });
   
+      /* Disable auto click
       map.once('zoomend', function() {
         setTimeout(function() {
           selectedMarker.fire('click');
         }, 1000);
       });
+      */
     } else {
       console.log("No markers available to shuffle.");
     }

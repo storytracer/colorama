@@ -1,3 +1,7 @@
+:root {
+  --navbar-height: 3.5rem;
+}
+
 body,
 html {
   margin: 0;
@@ -16,7 +20,7 @@ html.lg-on, .lg-container {
 }
 
 #map {
-  height: calc(100% - 3rem);
+  height: calc(100% - var(--navbar-height));
   width: 100%;
   transition: height 0.25s linear;
 }
@@ -95,13 +99,13 @@ html.lg-on, .lg-container {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - var(--navbar-height));
   background-color: #cccccc;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 99999; /* High z-index to ensure it's on top */
-  animation: fadeOutOverlay 2.5s ease forwards;
+  animation: fadeOutOverlay 2s ease forwards;
 }
 
 /* Spinning color wheel */
@@ -149,13 +153,17 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #ccc;
+  background-color: #a3a3a3;
   border-top: 1px solid #6b7280;
-  height: 3rem;
+  height: var(--navbar-height);
   z-index: 999;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.nav-item:first-of-type {
+.bottom-nav .nav-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 25rem;
 }
 
 .nav-item {
@@ -163,24 +171,25 @@ html.lg-on, .lg-container {
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: #5c5c5c; /* Adjust color as needed */
-  width: 4rem;
-  padding: 0.5rem;
+  color: #fff; /* Adjust color as needed */
+  width: 3.5rem;
+  margin: auto 0;
 }
 
 .nav-item svg {
-  width: 2rem;
-  height: 2rem;
-  fill: currentColor;
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 1.5;
+  /* fill: currentColor; */
 }
 
 .nav-item span {
   margin-top: 2px;
   font-family: 'Noto Sans Regular', sans-serif;
-  font-weight: bold;
   font-size: 0.75em;
+  font-weight: bold;
 }
 
 .nav-item:hover {
-  color: #2563eb; /* Adjust hover color as needed */
+  color: #333; /* Adjust hover color as needed */
 }
