@@ -1,5 +1,6 @@
 :root {
   --navbar-height: 3.5rem;
+  font-family: "Noto Sans", sans-serif;
 }
 
 body,
@@ -27,6 +28,7 @@ html.lg-on, .lg-container {
 
 .leaflet-container .leaflet-control-attribution a {
   color: #333;
+  font-family: "Noto Sans", sans-serif;
 }
 
 .leaflet-container .leaflet-control-attribution {
@@ -40,6 +42,7 @@ html.lg-on, .lg-container {
   position: relative;
   width: 60px; /* Width of the cluster image */
   height: 60px; /* Height of the cluster image */
+  font-family: "Noto Sans", sans-serif;
 }
 
 .cluster-marker img,
@@ -81,7 +84,7 @@ html.lg-on, .lg-container {
   top: 0;
   left: 0;
   line-height: 60px;
-  font-size: 1.3em;
+  font-size: 1.2em;
   font-weight: bold;
   color: #fff;
   width: 60px;
@@ -153,7 +156,7 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #a3a3a3;
+  background-color: #aaa;
   border-top: 1px solid #6b7280;
   height: var(--navbar-height);
   z-index: 999;
@@ -163,7 +166,7 @@ html.lg-on, .lg-container {
 .bottom-nav .nav-container {
   display: flex;
   justify-content: space-evenly;
-  width: 25rem;
+  width: 10rem;
 }
 
 .nav-item {
@@ -184,8 +187,6 @@ html.lg-on, .lg-container {
 }
 
 .nav-item span {
-  margin-top: 2px;
-  font-family: 'Noto Sans Regular', sans-serif;
   font-size: 0.75em;
   font-weight: bold;
 }
