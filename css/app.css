@@ -156,7 +156,7 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #666;
+  background-color: #a3a3a3;
   border-top: 1px solid #6b7280;
   height: var(--navbar-height);
   z-index: 999;
@@ -170,7 +170,7 @@ html.lg-on, .lg-container {
 .bottom-nav .nav-container {
   display: flex;
   justify-content: space-evenly;
-  width: 10rem;
+  width: 30rem;
 }
 
 .nav-item {
