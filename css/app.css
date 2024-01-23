@@ -156,11 +156,15 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #aaa;
+  background-color: #666;
   border-top: 1px solid #6b7280;
   height: var(--navbar-height);
   z-index: 999;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.nav-item:hover {
+  color: #ccc; /* Adjust hover color as needed */
 }
 
 .bottom-nav .nav-container {
@@ -189,8 +193,4 @@ html.lg-on, .lg-container {
 .nav-item span {
   font-size: 0.75em;
   font-weight: bold;
-}
-
-.nav-item:hover {
-  color: #333; /* Adjust hover color as needed */
 }
