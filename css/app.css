@@ -16,7 +16,7 @@ html.lg-on, .lg-container {
 }
 
 #map {
-  height: 100%;
+  height: calc(100% - 3rem);
   width: 100%;
   transition: height 0.25s linear;
 }
@@ -185,4 +185,50 @@ html.lg-on, .lg-container {
 }
 .l-box {
   padding: 1px;
+}
+
+/* Menu bar */
+
+.bottom-nav {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  height: 3rem;
+  z-index: 999;
+}
+
+.nav-item:first-of-type {
+  border-left: 1px solid #ccc;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #6b7280; /* Adjust color as needed */
+  width: 4rem;
+  border-right: 1px solid #ccc;
+  padding: 0.5rem;
+}
+
+.nav-item svg {
+  width: 2rem;
+  height: 2rem;
+  fill: currentColor;
+}
+
+.nav-item span {
+  margin-top: 2px;
+  font-family: 'Noto Sans Regular', sans-serif;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+
+.nav-item:hover {
+  color: #2563eb; /* Adjust hover color as needed */
 }
