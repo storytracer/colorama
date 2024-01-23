@@ -241,7 +241,7 @@ $(function () {
   
       map.flyTo(targetLatLng, targetZoom, {
         animate: true,
-        easeLinearity: 0.1,
+        easeLinearity: 1,
         duration: duration
       });
   
