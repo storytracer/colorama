@@ -82,6 +82,7 @@ $(function () {
     zoomToBoundsOnClick: true,
     spiderfyOnMaxZoom: false,
     maxClusterRadius: 100,
+    disableClusteringAtZoom: 16,
   });
   // clusters.on('clusterclick', function (a) {
   //   a.layer.zoomToBounds();
@@ -199,4 +200,61 @@ $(function () {
       iconSize: L.point(photoSize, photoSize), // Includes the height of the triangle
     });
   }
+
+  // Event listener for the shuffle button
+  $('#shuffle').on('click', function() {
+    shuffleMarker();
+  });
+
+  function calculateFlyToDuration(currentCenter, targetLatLng) {
+    // Constants for tuning the calculation
+    const minDuration = 2; // Minimum duration in seconds
+    const maxDuration = 5; // Maximum duration in seconds
+    const distanceFactor = 0.0005; // Adjust this to change duration scaling with distance
+  
+    // Calculate the geographical distance between the two points (in meters)
+    const distance = currentCenter.distanceTo(targetLatLng);
+  
+    // Calculate duration based on distance
+    let duration = distance * distanceFactor;
+  
+    // Apply minimum and maximum constraints
+    duration = Math.max(duration, minDuration);
+    duration = Math.min(duration, maxDuration);
+  
+    return duration;
+  }
+  
+  // Example usage within the shufflePhotos function
+  function shuffleMarker() {
+    const markers = clusters.getLayers();
+    if (markers.length > 0) {
+      const randomIndex = Math.floor(Math.random() * markers.length);
+      const selectedMarker = markers[randomIndex];
+  
+      const currentZoom = map.getZoom();
+      const targetZoom = 16; // Example target zoom level
+      const currentCenter = map.getCenter();
+      const targetLatLng = selectedMarker.getLatLng();
+  
+      const duration = calculateFlyToDuration(currentCenter, targetLatLng);
+  
+      map.flyTo(targetLatLng, targetZoom, {
+        animate: true,
+        easeLinearity: 0.1,
+        duration: duration
+      });
+  
+      map.once('zoomend', function() {
+        setTimeout(function() {
+          selectedMarker.fire('click');
+        }, 1000);
+      });
+    } else {
+      console.log("No markers available to shuffle.");
+    }
+  }
+  
+  // ... Rest of your code ...
+  
 });
