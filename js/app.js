@@ -50,7 +50,7 @@ $(function () {
   const gallery = lightGallery(galleryElement, {
     plugins: [lgZoom, lgThumbnail],
     dynamic: true,
-    dynamicEl: [{src: "/favicon-32x32.png"}], // Needs to contain an object on init, otherwise media overlaps
+    dynamicEl: [{src: "/favicon-32x32.png", thumb: "", subHtml: ""}], // Needs to contain an object on init, otherwise media overlaps
     loop: false,
     animateThumb: true,
     toggleThumb: false,
