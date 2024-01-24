@@ -243,7 +243,7 @@ html.lg-on, .lg-container {
   color: #fff; /* Adjust hover color as needed */
 }
 
-.nav-item.disabled {
+.nav-item.disabled, .nav-item.disabled:hover {
   color: #999
 }
 .nav-item svg {
