@@ -55,8 +55,9 @@ $(function () {
       const galleryId = hashParams.get("lg");
 
       if (galleryId) {
-
-        flyToGeohash(galleryId);
+        setTimeout(function() {
+          flyToGeohash(galleryId);
+        }, 1000);
       }
     }
   });
