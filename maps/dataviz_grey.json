@@ -2546,6 +2546,7 @@
             "type": "symbol",
             "source": "protomaps",
             "source-layer": "physical_point",
+            "minzoom": 3,
             "filter": [
                 "any",
                 [
