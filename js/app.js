@@ -213,8 +213,8 @@ $(function () {
 
   function calculateFlyToDuration(currentCenter, targetLatLng) {
     // Constants for tuning the calculation
-    const minDuration = 4; // Minimum duration in seconds
-    const maxDuration = 8; // Maximum duration in seconds
+    const minDuration = 2.5; // Minimum duration in seconds
+    const maxDuration = 5; // Maximum duration in seconds
     const distanceFactor = 0.0005; // Adjust this to change duration scaling with distance
   
     // Calculate the geographical distance between the two points (in meters)
@@ -222,6 +222,10 @@ $(function () {
   
     // Calculate duration based on distance
     let duration = distance * distanceFactor;
+
+    if (map.getZoom() < 3) {
+      duration = duration / 2;
+    }
   
     // Apply minimum and maximum constraints
     duration = Math.max(duration, minDuration);
@@ -287,11 +291,13 @@ $(function () {
       duration: duration
     });
   
+    /* Disable automatic click on marker
     map.once('zoomend', function() {
       setTimeout(function() {
         selectedMarker.fire('click');
-      }, 500);
+      }, 250);
     });
+    */
   }
   
 });

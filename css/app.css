@@ -124,34 +124,30 @@ html.lg-on, .lg-container {
   width: 100%;
   height: calc(100% - var(--navbar-height) - 1px);
   background-color: #ccc;
+  z-index: 99999; /* High z-index to ensure it's on top */
+  animation: fadeOutOverlay 3s ease forwards;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 99999; /* High z-index to ensure it's on top */
-  animation: fadeOutOverlay 3s ease forwards;
 }
 
-/* Spinning color wheel */
-.color-wheel {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 10px solid transparent;
-  border-top-color: #ff5733; /* Red */
-  border-right-color: #3498db; /* Green */
-  border-bottom-color: #2ecc71; /* Blue */
-  border-left-color: #f1c40f; /* Yellow */
-  animation: spin 1s linear 0s infinite;
+.loading-overlay h1 {
+  text-align: center;
+  color: var(--logo-green);
+  margin-bottom: 0.5rem;
+  font-size: 3em;
 }
 
-/* Keyframes for spinning the color wheel */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logo-red {
+  color: var(--logo-red);
+}
+
+.logo-green {
+  color: var(--logo-green);
+}
+
+.logo-blue {
+  color: var(--logo-blue);
 }
 
 /* Keyframes for fading out the overlay */
@@ -169,12 +165,13 @@ html.lg-on, .lg-container {
 }
 
 /* Pulsasting logo loading animation */
-.loading-container {
+.loading-logo {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1px;
   width: 50px; /* Adjust the size of the logo */
   height: 50px;
+  margin: auto;
   justify-content: center;
   align-items: center;
 }
