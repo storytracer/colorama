@@ -44,7 +44,7 @@ html.lg-on, .lg-container {
 }
 
 .leaflet-container .leaflet-control-attribution {
-  color: #ccc;
+  color: #777;
   background: transparent !important;
   margin-right: 5px !important;
   margin-bottom: 5px !important;
@@ -116,7 +116,7 @@ html.lg-on, .lg-container {
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - var(--navbar-height));
+  height: 100%;
   background-color: #ccc;
   display: flex;
   justify-content: center;
@@ -174,14 +174,14 @@ html.lg-on, .lg-container {
   border-top: 1px solid #6b7280;
   height: var(--navbar-height);
   z-index: 999;
-  box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.2); */
 }
 
 
 .bottom-nav .nav-container {
   display: flex;
   justify-content: space-evenly;
-  width: 30rem;
+  width: 18rem;
 }
 
 .nav-item {
