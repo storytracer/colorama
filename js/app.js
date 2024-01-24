@@ -43,6 +43,8 @@ $(function () {
     maplibreMap.setLayoutProperty('places_country', 'visibility', 'none');
     maplibreMap.setLayoutProperty('places_region', 'visibility', 'none');
     maplibreMap.setLayoutProperty('pois_important', 'visibility', 'none');
+
+    $(".loading-overlay").toggleClass("hidden");
   });
 
   const galleryElement = $("#gallery")[0];

@@ -10,9 +10,6 @@
 
 /* Inter Font */
 :root { font-family: 'Inter', 'Helvetica', sans-serif; }
-@supports (font-variation-settings: normal) {
-  :root { font-family: 'Inter var', 'Helvetica', sans-serif; }
-}
 
 /* Variables */
 :root {
@@ -123,13 +120,16 @@ html.lg-on, .lg-container {
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - var(--navbar-height) - 1px);
+  height: 100%;
   background-color: #ccc;
   z-index: 99999; /* High z-index to ensure it's on top */
-  animation: fadeOutOverlay 3s ease forwards;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.loading-overlay.hidden {
+  animation: fadeOutOverlay 1s ease forwards;
 }
 
 .loading-overlay h1 {
