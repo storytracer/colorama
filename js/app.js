@@ -1,6 +1,9 @@
 $(function () {
   const center = [25, 10];
 
+  var markerHistory = [];
+  var markerHistoryIndex = 0;
+
   const map = L.map("map", {
     center: center,
     minZoom: 2,
@@ -213,6 +216,20 @@ $(function () {
     shuffleMarker();
   });
 
+  $('#back').on('click', function(event) {
+    const backButton = $(event.target);
+    console.log(markerHistory)
+    if (markerHistory.length > 1) {
+      const lastMarker = markerHistory[markerHistory.length - 2];
+      flyToMarker(lastMarker);
+      markerHistory.pop();
+
+      if (markerHistory.length < 2) {
+        $('#back').toggleClass('disabled');
+      }
+    }
+  });
+
   function calculateFlyToDuration(currentCenter, targetLatLng) {
     // Constants for tuning the calculation
     const minDuration = 2.5; // Minimum duration in seconds
@@ -266,7 +283,12 @@ $(function () {
       for (const wm of weightedMarkers) {
         sum += wm.weight;
         if (r <= sum) {
-          flyToMarker(wm.marker);
+          const selectedMarker = wm.marker;
+          markerHistory.push(selectedMarker);
+          flyToMarker(selectedMarker);
+          if ($('#back').hasClass('disabled')) {
+            $('#back').removeClass('disabled');
+          }
           break;
         }
       }
@@ -293,13 +315,11 @@ $(function () {
       duration: duration
     });
   
-    /* Disable automatic click on marker
     map.once('zoomend', function() {
       setTimeout(function() {
         selectedMarker.fire('click');
       }, 250);
     });
-    */
   }
   
 });

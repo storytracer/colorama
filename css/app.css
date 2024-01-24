@@ -240,9 +240,12 @@ html.lg-on, .lg-container {
 }
 
 .nav-item:hover {
-  color: #666; /* Adjust hover color as needed */
+  color: #fff; /* Adjust hover color as needed */
 }
 
+.nav-item.disabled {
+  color: #999
+}
 .nav-item svg {
   width: 1.5rem;
   height: 1.5rem;
