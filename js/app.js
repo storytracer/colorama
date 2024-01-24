@@ -255,10 +255,6 @@ $(function () {
   
     // Calculate duration based on distance
     let duration = distance * distanceFactor;
-
-    if (map.getZoom() < 3) {
-      duration = duration / 2;
-    }
   
     // Apply minimum and maximum constraints
     duration = Math.max(duration, minDuration);
@@ -300,7 +296,7 @@ $(function () {
           const selectedMarker = wm.marker;
           markerHistory.push(selectedMarker);
           flyToMarker(selectedMarker);
-          if ($('#backButton').hasClass('disabled')) {
+          if (markerHistory.length > 1 && $('#backButton').hasClass('disabled')) {
             $('#backButton').removeClass('disabled');
           }
           break;
