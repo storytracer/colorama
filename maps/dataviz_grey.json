@@ -2808,6 +2808,7 @@
                     0
                 ]
             },
+            "minzoom": 3,
             "maxzoom": 8
         },
         {
@@ -2820,6 +2821,7 @@
                 "pmap:kind",
                 "locality"
             ],
+            "minzoom": 3,
             "layout": {
                 "text-field": "{name}",
                 "text-font": [
