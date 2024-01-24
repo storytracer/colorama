@@ -212,11 +212,11 @@ $(function () {
   }
 
   // Event listener for the shuffle button
-  $('#shuffle').on('click', function() {
+  $('#shuffleButton').on('click', function() {
     shuffleMarker();
   });
 
-  $('#back').on('click', function(event) {
+  $('#backButton').on('click', function(event) {
     const backButton = $(event.target);
     console.log(markerHistory)
     if (markerHistory.length > 1) {
@@ -225,8 +225,22 @@ $(function () {
       markerHistory.pop();
 
       if (markerHistory.length < 2) {
-        $('#back').toggleClass('disabled');
+        $('#backButton').toggleClass('disabled');
       }
+    }
+  });
+
+  $("#aboutButton").on("click", function () {
+    $("#about").show();
+  });
+
+  $("#about .close").on("click", function () {
+    $("#about").hide();
+  });
+
+  $(window).on("click", function (event) {
+    if (event.target == $("#about")[0]) {
+      $("#about").hide();
     }
   });
 
@@ -286,8 +300,8 @@ $(function () {
           const selectedMarker = wm.marker;
           markerHistory.push(selectedMarker);
           flyToMarker(selectedMarker);
-          if ($('#back').hasClass('disabled')) {
-            $('#back').removeClass('disabled');
+          if ($('#backButton').hasClass('disabled')) {
+            $('#backButton').removeClass('disabled');
           }
           break;
         }
