@@ -287,21 +287,18 @@ $(function () {
     }
   });
 
-  function calculateFlyToDuration(currentCenter, targetLatLng) {
-    // Constants for tuning the calculation
-    const minDuration = 2.5; // Minimum duration in seconds
-    const maxDuration = 5; // Maximum duration in seconds
-    const distanceFactor = 0.0005; // Adjust this to change duration scaling with distance
+  function calculateFlyToDuration(origin, target, zoomLevel = 2) {
+    const speed = 2000; // km per second
+    const startDelay = 2;
+    const zoomFactor = 0.2;
+    const zoomDelay = zoomLevel * zoomFactor;
   
     // Calculate the geographical distance between the two points (in meters)
-    const distance = currentCenter.distanceTo(targetLatLng);
+    const distance = origin.distanceTo(target);
+    console.log("Distance: " + distance);
   
     // Calculate duration based on distance
-    let duration = distance * distanceFactor;
-  
-    // Apply minimum and maximum constraints
-    duration = Math.max(duration, minDuration);
-    duration = Math.min(duration, maxDuration);
+    const duration = startDelay + zoomDelay + (distance / (speed * 1000));
   
     return duration;
   }
@@ -379,22 +376,25 @@ $(function () {
 
   function flyToMarker(selectedMarker) {
     const targetZoom = 16; // Example target zoom level
+    const currentZoom = map.getZoom();
     const currentCenter = map.getCenter();
     const targetLatLng = selectedMarker.getLatLng();
   
-    const duration = calculateFlyToDuration(currentCenter, targetLatLng);
+    console.log("Current zoom: " + currentZoom);
+    console.log("Current center: " + currentCenter);
+    console.log("Target latlng: " + targetLatLng);
+    const duration = calculateFlyToDuration(currentCenter, targetLatLng, currentZoom);
+    console.log("Fly to duration: " + duration);
   
     map.flyTo(targetLatLng, targetZoom, {
       animate: true,
-      easeLinearity: 1,
-      duration: duration
+      duration: duration,
     });
   
     map.once('zoomend', function() {
       setTimeout(function() {
         selectedMarker.fire('click');
-      }, 250);
+      }, 500);
     });
   }
-  
 });
