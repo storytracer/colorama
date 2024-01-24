@@ -1,6 +1,19 @@
+@font-face {
+  font-display: swap;
+  font-family: CCSymbols;
+  font-synthesis: none;
+  src: url('/fonts/web/CCSymbols.woff2') format(woff2),
+       url('/fonts/web/CCSymbols.woff')  format(woff);
+  unicode-range: u+a9, u+229c, u+1f10d-1f10f, u+1f16d-1f16f;
+}
+
+:root { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'Inter var', sans-serif; }
+}
+
 :root {
   --navbar-height: 3.5rem;
-  font-family: "Noto Sans", sans-serif;
 }
 
 body,
@@ -9,7 +22,7 @@ html {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #cccccc;
+  background-color: #ccc;
 }
 
 html.lg-on, .lg-container {
@@ -27,14 +40,15 @@ html.lg-on, .lg-container {
 }
 
 .leaflet-container .leaflet-control-attribution a {
-  color: #333;
-  font-family: "Noto Sans", sans-serif;
+  color: inherit;
 }
 
 .leaflet-container .leaflet-control-attribution {
+  color: #ccc;
   background: transparent !important;
   margin-right: 5px !important;
   margin-bottom: 5px !important;
+  font-family: 'Inter', sans-serif, CCSymbols;
 }
 
 .cluster-marker,
@@ -42,7 +56,7 @@ html.lg-on, .lg-container {
   position: relative;
   width: 60px; /* Width of the cluster image */
   height: 60px; /* Height of the cluster image */
-  font-family: "Noto Sans", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .cluster-marker img,
@@ -103,7 +117,7 @@ html.lg-on, .lg-container {
   left: 0;
   width: 100%;
   height: calc(100% - var(--navbar-height));
-  background-color: #cccccc;
+  background-color: #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,16 +170,13 @@ html.lg-on, .lg-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #a3a3a3;
+  background-color: #ccc;
   border-top: 1px solid #6b7280;
   height: var(--navbar-height);
   z-index: 999;
   box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.2);
 }
 
-.nav-item:hover {
-  color: #ccc; /* Adjust hover color as needed */
-}
 
 .bottom-nav .nav-container {
   display: flex;
@@ -178,9 +189,13 @@ html.lg-on, .lg-container {
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: #fff; /* Adjust color as needed */
+  color: #333; /* Adjust color as needed */
   width: 3.5rem;
   margin: auto 0;
+}
+
+.nav-item:hover {
+  color: #666; /* Adjust hover color as needed */
 }
 
 .nav-item svg {
@@ -192,5 +207,5 @@ html.lg-on, .lg-container {
 
 .nav-item span {
   font-size: 0.75em;
-  font-weight: bold;
+  font-weight: 500;
 }

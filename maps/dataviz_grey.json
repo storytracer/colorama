@@ -2449,7 +2449,7 @@
             "layout": {
                 "symbol-placement": "line",
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-field": [
                     "get",
@@ -2477,7 +2477,7 @@
             ],
             "layout": {
                 "text-font": [
-                    "Noto Sans Italic"
+                    "Inter Italic"
                 ],
                 "text-field": [
                     "get",
@@ -2527,7 +2527,7 @@
                 ],
                 "symbol-placement": "line",
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-field": [
                     "get",
@@ -2562,7 +2562,7 @@
             ],
             "layout": {
                 "text-font": [
-                    "Noto Sans Medium"
+                    "Inter Medium"
                 ],
                 "text-field": [
                     "get",
@@ -2605,7 +2605,7 @@
             ],
             "layout": {
                 "text-font": [
-                    "Noto Sans Medium"
+                    "Inter Medium"
                 ],
                 "text-field": [
                     "get",
@@ -2656,7 +2656,7 @@
                 ],
                 "symbol-placement": "line",
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-field": [
                     "get",
@@ -2687,7 +2687,7 @@
                 ],
                 "text-field": "{name}",
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-max-width": 7,
                 "text-letter-spacing": 0.1,
@@ -2754,7 +2754,7 @@
                     "pmap:min_zoom"
                 ],
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-field": [
                     "get",
@@ -2835,13 +2835,13 @@
                     [
                         "literal",
                         [
-                            "Noto Sans Medium"
+                            "Inter Medium"
                         ]
                     ],
                     [
                         "literal",
                         [
-                            "Noto Sans Regular"
+                            "Inter Regular"
                         ]
                     ]
                 ],
@@ -3074,7 +3074,7 @@
                     ]
                 ],
                 "text-font": [
-                    "Noto Sans Regular"
+                    "Inter Regular"
                 ],
                 "text-size": [
                     "interpolate",
@@ -3116,7 +3116,7 @@
                 ],
                 "text-field": "{name}",
                 "text-font": [
-                    "Noto Sans Medium"
+                    "Inter Medium"
                 ],
                 "text-size": [
                     "interpolate",
@@ -3222,5 +3222,5 @@
             }
         }
     ],
-    "glyphs": "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf"
+    "glyphs": "/fonts/map/{fontstack}/{range}.pbf"
 }

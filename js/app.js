@@ -40,6 +40,9 @@ $(function () {
   maplibreMap.on('load', () => {
     maplibreMap.setLayoutProperty('boundaries', 'visibility', 'none');
     maplibreMap.setLayoutProperty('roads_highway', 'visibility', 'none');
+    maplibreMap.setLayoutProperty('places_country', 'visibility', 'none');
+    maplibreMap.setLayoutProperty('places_region', 'visibility', 'none');
+    maplibreMap.setLayoutProperty('pois_important', 'visibility', 'none');
   });
 
   const galleryElement = $("#gallery")[0];
@@ -64,8 +67,9 @@ $(function () {
     .attribution({
       position: "bottomright",
     })
+    .setPrefix(false)
     .addTo(map);
-  attribution.addAttribution("<a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>");
+  attribution.addAttribution("🅮 <a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>");
 
   L.control
     .zoom({
