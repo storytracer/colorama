@@ -48,24 +48,17 @@ $(function () {
     maplibreMap.setLayoutProperty('pois_important', 'visibility', 'none');
 
     $(".loading-overlay").toggleClass("hidden");
-  });
 
-  const galleryElement = $("#gallery")[0];
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const hashParams = new URLSearchParams(hash);
+      const galleryId = hashParams.get("lg");
 
-  const gallery = lightGallery(galleryElement, {
-    plugins: [lgZoom, lgThumbnail],
-    dynamic: true,
-    dynamicEl: [{src: "/favicon-32x32.png", thumb: "", subHtml: ""}], // Needs to contain an object on init, otherwise media overlaps
-    loop: false,
-    animateThumb: true,
-    toggleThumb: false,
-    allowMediaOverlap: false,
-    mobileSettings: {
-      controls: false,
-      download: true,
-      showMaximizeIcon: false,
-      showCloseIcon: true,
-    },
+      if (galleryId) {
+
+        flyToGeohash(galleryId);
+      }
+    }
   });
 
   var attribution = L.control
@@ -111,6 +104,7 @@ $(function () {
             let marker = createMarker(feature, layer.getLatLng());
             marker.options.photo_count = feature.properties.count;
             marker.options.image_file = feature.properties.image_file;
+            marker.options.geohash = feature.properties.geohash;
             clusters.addLayer(marker);
           }
         },
@@ -145,8 +139,8 @@ $(function () {
 
   function showPhotosForFeature(feature) {
     map.panTo([feature.properties.latitude, feature.properties.longitude]);
-    var geohash = feature.properties.geohash;
-    var geojsonUrl =
+    const geohash = feature.properties.geohash;
+    const geojsonUrl =
       "https://features.colorama.app/collections/public.photos/items.json?geohash=" +
       geohash;
 
@@ -177,10 +171,58 @@ $(function () {
             }
           },
         });
-          
-        gallery.refresh(photoElements.slice(0, 20));
+
+        if ($(`#${geohash}`).length < 1) {
+          $("#galleries").append(`<div id="${geohash}"></div>`);
+        }
+
+        const galleryElement = document.getElementById(geohash);
+        galleryElement.addEventListener('lgAfterClose', (event) => {
+          pluginInstance = event.detail.instance;
+          pluginInstance.destroy();
+          $(galleryElement).remove();
+        });
+
+        let slideIndex = 0;
+
+        if (window.location.hash) {
+          const hash = window.location.hash.substring(1);
+          const hashParams = new URLSearchParams(hash);
+          const slideParam = hashParams.get("slide");
+          console.log(slideParam)
+          if (slideParam) {
+            slideIndex = parseInt(slideParam);
+          }
+        }
+
+        const gallery = lightGallery(galleryElement, {
+          plugins: [lgZoom, lgThumbnail, lgHash],
+          dynamic: true,
+          dynamicEl: [{src: "/favicon-32x32.png", thumb: "", subHtml: ""}], // Needs to contain an object on init, otherwise media overlaps
+          loop: false,
+          index: slideIndex,
+          galleryId: geohash,
+          animateThumb: true,
+          toggleThumb: false,
+          allowMediaOverlap: false,
+          mobileSettings: {
+            controls: false,
+            download: true,
+            showMaximizeIcon: false,
+            showCloseIcon: true,
+          },
+        });
+
+        let initialSlideNum = 20;
+
+        if (initialSlideNum > slideIndex + 1) {
+          gallery.refresh(photoElements.slice(0, initialSlideNum));
+        } else {
+          gallery.refresh(photoElements);
+        }
+
         gallery.openGallery();
-        if (photoElements.length > 20) {
+        if (photoElements.length > initialSlideNum) {
           setTimeout(function() {
             gallery.refresh(photoElements);
           }, 1000);
@@ -294,11 +336,7 @@ $(function () {
         sum += wm.weight;
         if (r <= sum) {
           const selectedMarker = wm.marker;
-          markerHistory.push(selectedMarker);
-          flyToMarker(selectedMarker);
-          if (markerHistory.length > 1 && $('#backButton').hasClass('disabled')) {
-            $('#backButton').removeClass('disabled');
-          }
+          openMarker(selectedMarker);
           break;
         }
       }
@@ -311,8 +349,34 @@ $(function () {
     shuffleDistantMarker();
   }
 
+  function openMarker(selectedMarker) {
+    markerHistory.push(selectedMarker);
+    flyToMarker(selectedMarker);
+    if (markerHistory.length > 1 && $('#backButton').hasClass('disabled')) {
+      $('#backButton').removeClass('disabled');
+    }
+  }
+
+  function flyToGeohash(geohash) {
+    const selectedMarker = findMarkerByGeohash(geohash);
+    if (selectedMarker) {
+      openMarker(selectedMarker);
+    } else {
+      console.log("No marker found for geohash: " + geohash);
+    }
+  }
+
+  function findMarkerByGeohash(geohash) {
+    const markers = clusters.getLayers();
+    const matchingMarkers = markers.filter(marker => marker.options.geohash == geohash);
+    if (matchingMarkers.length > 0) {
+      return matchingMarkers[0];
+    } else {
+      return null;
+    }
+  }
+
   function flyToMarker(selectedMarker) {
-    const currentZoom = map.getZoom();
     const targetZoom = 16; // Example target zoom level
     const currentCenter = map.getCenter();
     const targetLatLng = selectedMarker.getLatLng();
