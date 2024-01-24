@@ -20,6 +20,7 @@
   --logo-red: #FF5733;
   --logo-blue: #3498DB;
   --logo-green: #2ECC71;
+  --logo-yellow: #F1C40F;
 }
 
 body,
@@ -133,9 +134,10 @@ html.lg-on, .lg-container {
 
 .loading-overlay h1 {
   text-align: center;
-  color: var(--logo-green);
+  color: #333;
   margin-bottom: 0.5rem;
   font-size: 3em;
+  letter-spacing: -0.05em;
 }
 
 .logo-red {
@@ -148,6 +150,10 @@ html.lg-on, .lg-container {
 
 .logo-blue {
   color: var(--logo-blue);
+}
+
+.logo-yellow {
+  color: var(--logo-yellow);
 }
 
 /* Keyframes for fading out the overlay */
