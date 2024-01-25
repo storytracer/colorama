@@ -1,9 +1,6 @@
 $(function () {
   const center = [25, 10];
 
-  var markerHistory = [];
-  var markerHistoryIndex = 0;
-
   const map = L.map("map", {
     center: center,
     minZoom: 2,
@@ -55,9 +52,7 @@ $(function () {
       const galleryId = hashParams.get("lg");
 
       if (galleryId) {
-        setTimeout(function() {
-          flyToGeohash(galleryId);
-        }, 1000);
+        flyToGeohash(galleryId);
       }
     }
   });
@@ -79,6 +74,7 @@ $(function () {
   const photoSize = 60;
   const thumbUrlPrefix =
     "https://images.colorama.app/unsigned/crop:0.85:0.85/resize:fill-down:128:128/plain/local:///kahn/";
+  const fullImageUrlPrefix = "https://images.colorama.app/unsigned/plain/local:///kahn/";
 
   const clusters = L.markerClusterGroup({
     iconCreateFunction: createClusterCustomIcon,
@@ -154,9 +150,7 @@ $(function () {
             if (feature.properties && feature.properties["image.filename"]) {
               const filename = feature.properties["image.filename"];
               const thumbUrl = thumbUrlPrefix + filename;
-              const fullImageUrl =
-                "https://images.colorama.app/unsigned/plain/local:///kahn/" +
-                filename;
+              const fullImageUrl = fullImageUrlPrefix + filename;
               const license = feature.properties.license;
               const subHtml = `
                 <p><strong>Caption: </strong>${feature.properties.caption}</p>
@@ -173,6 +167,8 @@ $(function () {
           },
         });
 
+        preloadImage(photoElements[0].thumb);
+
         if ($(`#${geohash}`).length < 1) {
           $("#galleries").append(`<div id="${geohash}"></div>`);
         }
@@ -183,6 +179,7 @@ $(function () {
           pluginInstance.destroy();
           $(galleryElement).remove();
         });
+        galleryElement.addEventListener('lgBeforeOpen', () => { window.history.pushState('#lgopen', 'Gallery opened'); });
 
         let slideIndex = 0;
 
@@ -236,6 +233,8 @@ $(function () {
     const firstChild = children.length ? children[0] : null;
     const firstChildImageFile = firstChild.options.image_file;
     const imageUrl = thumbUrlPrefix + firstChildImageFile;
+
+    preloadImage(imageUrl);
     const photoCount = children.reduce((total, child) => {
       return total + child.options.photo_count;
     }, 0);
@@ -259,18 +258,8 @@ $(function () {
     shuffleMarker();
   });
 
-  $('#backButton').on('click', function(event) {
-    const backButton = $(event.target);
-    console.log(markerHistory)
-    if (markerHistory.length > 1) {
-      const lastMarker = markerHistory[markerHistory.length - 2];
-      flyToMarker(lastMarker);
-      markerHistory.pop();
-
-      if (markerHistory.length < 2) {
-        $('#backButton').toggleClass('disabled');
-      }
-    }
+  $('#zoomOutButton').on('click', function(event) {
+    zoomOut();
   });
 
   $("#aboutButton").on("click", function () {
@@ -348,11 +337,7 @@ $(function () {
   }
 
   function openMarker(selectedMarker) {
-    markerHistory.push(selectedMarker);
     flyToMarker(selectedMarker);
-    if (markerHistory.length > 1 && $('#backButton').hasClass('disabled')) {
-      $('#backButton').removeClass('disabled');
-    }
   }
 
   function flyToGeohash(geohash) {
@@ -375,26 +360,42 @@ $(function () {
   }
 
   function flyToMarker(selectedMarker) {
-    const targetZoom = 16; // Example target zoom level
-    const currentZoom = map.getZoom();
+    console.log(selectedMarker);
+    const parentCluster = selectedMarker.__parent;
+    const targetZoom = 16;
     const currentCenter = map.getCenter();
     const targetLatLng = selectedMarker.getLatLng();
-  
-    console.log("Current zoom: " + currentZoom);
-    console.log("Current center: " + currentCenter);
-    console.log("Target latlng: " + targetLatLng);
-    const duration = calculateFlyToDuration(currentCenter, targetLatLng, currentZoom);
-    console.log("Fly to duration: " + duration);
-  
-    map.flyTo(targetLatLng, targetZoom, {
-      animate: true,
-      duration: duration,
+    const currentZoom = map.getZoom();
+    const thumbURL = thumbUrlPrefix + selectedMarker.options.image_file;
+
+    preloadImage(thumbURL);
+    map.setView(targetLatLng, 2, {
+
     });
-  
-    map.once('zoomend', function() {
-      setTimeout(function() {
-        selectedMarker.fire('click');
-      }, 500);
-    });
+    setTimeout(function() {
+      map.once("zoomend", function () {
+        setTimeout(function() {
+          selectedMarker.fire("click");
+        }, 250);
+      });
+
+      map.flyTo(targetLatLng, targetZoom, {
+        animate: true,
+      });
+    }, 250);
+  }
+
+  function zoomOut() {
+    if (map.getZoom() > 2) {
+      clusters.refreshClusters();
+      map.setView(map.getCenter(), 2, {
+        animate: true,
+      });
+    }
+  }
+
+  function preloadImage(url) {
+    var img = new Image();
+    img.src = url;
   }
 });
