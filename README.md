@@ -1,4 +1,4 @@
-# Colorama
+# [Colorama](https://www.colorama.app)
 ### Mapping the past in true color
 
 **Colorama** lets you explore true color photographs from the early 20th century on an interactive map.
