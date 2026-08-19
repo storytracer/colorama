@@ -37,6 +37,28 @@
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
   <!-- Cash -->
+  <!-- Mobile debug console: open the site with ?debug (e.g. colorama.app/?debug)
+       to get on-device devtools (console, network, resources). Served first-party
+       so content blockers can't block the debugger itself. Remove when done. -->
+  <script>
+    (function () {
+      if (!/[?&#]debug/.test(location.href)) return;
+      window.__debugLog = [];
+      window.addEventListener("error", function (e) {
+        window.__debugLog.push(e.message || ("resource failed: " + (e.target && e.target.src || e.target && e.target.href)));
+      }, true);
+      window.addEventListener("unhandledrejection", function (e) {
+        window.__debugLog.push("unhandled rejection: " + e.reason);
+      });
+      var s = document.createElement("script");
+      s.src = "/js/eruda.js";
+      s.onload = function () {
+        eruda.init();
+        window.__debugLog.forEach(function (m) { console.error("[early]", m); });
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
   <script src="https://unpkg.com/cash-dom@8.1.5/dist/cash.min.js"></script>
 
   <!-- MapLibre -->
